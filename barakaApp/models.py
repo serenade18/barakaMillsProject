@@ -48,6 +48,7 @@ class UserAccountManager(BaseUserManager):
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     class UserTypes(models.TextChoices):
+        ADMIN = 'admin', 'Admin'
         SALES = 'sales', 'Sales'
         ACCOUNTS = 'accounts', 'Accounts'
         HYBRID = 'hybrid', 'Hybrid'
