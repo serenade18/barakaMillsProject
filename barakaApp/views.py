@@ -41,26 +41,6 @@ class AdminUserViewSet(viewsets.ViewSet):
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
 
-    # def create(self, request):
-    #     modified_data = request.data.copy()
-    #     modified_data['user_type'] = 'admin'  # Explicitly set user type to admin
-    #
-    #     serializer = UserCreateSerializer(data=modified_data)
-    #     if serializer.is_valid():
-    #         # Hash the password before saving the user
-    #         password = make_password(serializer.validated_data['password'])
-    #         serializer.validated_data['password'] = password
-    #
-    #         # Set the admin user as active
-    #         serializer.is_superuser = True
-    #         serializer.validated_data['is_active'] = True
-    #         serializer.validated_data['is_staff'] = True
-    #         serializer.validated_data['user_type'] = 'admin'
-    #         serializer.save()
-    #
-    #         return Response({'message': 'Admin account created successfully'}, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def create(self, request):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
@@ -192,6 +172,8 @@ class HybridUserViewSet(viewsets.ViewSet):
         try:
             user = UserAccount.objects.get(email=email)
             user.is_active = True
+            user.is_staff = True
+            user.is_superuser = False
             user.user_type = 'hybrid'
             user.save()
         except UserAccount.DoesNotExist:
