@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
+from barakaApp.models import Farmer
 
 User = get_user_model()
 
@@ -35,3 +36,9 @@ class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'name', 'phone', 'user_type',  'added_on']
+
+
+class FarmerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Farmer
+        fields = "__all__"
