@@ -85,3 +85,13 @@ class OTP(models.Model):
 
     def is_valid(self):
         return timezone.now() < self.created_at + timedelta(minutes=10)  # OTP valid for 10 minutes
+
+
+class Farmer(models.Model):
+    id = models.AutoField(primary_key=True)
+    alias = models.CharField(max_length=255, null=True)
+    farmer_number = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    added_on = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
