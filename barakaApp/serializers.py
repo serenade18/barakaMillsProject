@@ -17,7 +17,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         user_type = attrs.get('user_type', 'sales')
-        if user_type not in ['sale', 'accounts', 'hybrid']:
+        if user_type not in ['sales', 'accounts', 'hybrid']:
             raise serializers.ValidationError("Invalid user type")
 
         return attrs
