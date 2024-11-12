@@ -9,13 +9,14 @@ from django.utils import timezone
 from rest_framework import viewsets, status, generics, permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from barakaApp.models import UserAccount, OTP
-from barakaApp.serializers import UserAccountSerializer, UserCreateSerializer
+from barakaApp.models import UserAccount, OTP, Farmer
+from barakaApp.serializers import UserAccountSerializer, UserCreateSerializer, FarmerSerializer
 
 User = get_user_model()
 
@@ -31,6 +32,7 @@ class UserInfoView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# Admin viewset
 class AdminUserViewSet(viewsets.ViewSet):
     permission_classes_by_action = {
         'create': [AllowAny],
@@ -93,6 +95,7 @@ class AdminUserViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Hybrid viewset
 class HybridUserViewSet(viewsets.ViewSet):
     permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminUser], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
 
@@ -214,6 +217,7 @@ class HybridUserViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Sales viewset
 class SalesUserViewSet(viewsets.ViewSet):
     permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminUser], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
 
@@ -333,6 +337,7 @@ class SalesUserViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Accounts viewset
 class AccountsUserViewSet(viewsets.ViewSet):
     permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminUser], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
 
@@ -450,3 +455,60 @@ class AccountsUserViewSet(viewsets.ViewSet):
         user = UserAccount.objects.get(pk=pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Farmer viewset
+class FarmerViewSet(viewsets.ViewSet):
+    permission_classes_by_action = {'create': [IsAuthenticated], 'list': [IsAuthenticated], 'update': [IsAuthenticated], 'destroy': [IsAdminUser], 'default': [IsAuthenticated]}
+
+    pagination_class = PageNumberPagination()
+
+    def list(self, request):
+        paginator = self.pagination_class
+        farmer = Farmer.objects.all()
+        page = paginator.paginate_queryset(farmer, request, view=self)
+        if page is not None:
+            serializer = FarmerSerializer(page, many=True, context={"request": request})
+            response_data = paginator.get_paginated_response(serializer.data).data
+        else:
+            serializer = FarmerSerializer(farmer, many=True, context={"request": request})
+            response_data = serializer.data
+
+        response_dict = {"error": False, "message": "All Farmers List Data", "data": response_data}
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = FarmerSerializer(data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False, "message": "Farmers Data Saved Successfully"}
+        except:
+            dict_response = {"error": True, "message": "Error During Saving Farmers Data"}
+
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=None):
+        queryset = Farmer.objects.all()
+        farmer = get_object_or_404(queryset, pk=pk)
+        serializer = FarmerSerializer(farmer)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        try:
+            queryset = Farmer.objects.all()
+            farmer = get_object_or_404(queryset, pk=pk)
+            serializer = FarmerSerializer(farmer, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False, "message": "Successfully Updated Farmer Data"}
+        except:
+            dict_response = {"error": True, "message": "Error During Updating Farmer Data"}
+
+        return Response(dict_response)
+
+    def destroy(self, request, pk=None):
+        queryset = Farmer.objects.all()
+        farmer = get_object_or_404(queryset, pk=pk)
+        farmer.delete()
+        return Response({"error": False, "message": "Farmer Deleted"})
