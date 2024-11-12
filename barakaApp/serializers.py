@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from barakaApp.models import Farmer
+from barakaApp.models import Farmer, Milled
 
 User = get_user_model()
 
 
+# User create serializer
 class UserCreateSerializer(serializers.ModelSerializer):
     user_type = serializers.CharField(default='sales', required=False)
 
@@ -24,6 +25,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return attrs
 
 
+# User serializer with login time
 class CustomUserSerializer(serializers.ModelSerializer):
     last_login = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
 
@@ -32,13 +34,22 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'name', 'phone', 'user_type', 'last_login']
 
 
+# User serializer with no login time
 class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'name', 'phone', 'user_type',  'added_on']
 
 
+# Farmer serializer
 class FarmerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Farmer
+        fields = "__all__"
+
+
+# Milled serializer
+class MilledSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Milled
         fields = "__all__"
