@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 
 
+# Base user manager
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, name, phone, password=None, user_type=None):
         if not email:
@@ -46,6 +47,7 @@ class UserAccountManager(BaseUserManager):
         return user
 
 
+# User account model
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     class UserTypes(models.TextChoices):
         ADMIN = 'admin', 'Admin'
@@ -78,6 +80,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
             raise ValidationError('Invalid user type')
 
 
+# OTP model
 class OTP(models.Model):
     email = models.EmailField()
     otp = models.CharField(max_length=6)
@@ -87,6 +90,7 @@ class OTP(models.Model):
         return timezone.now() < self.created_at + timedelta(minutes=10)  # OTP valid for 10 minutes
 
 
+# Farmer model
 class Farmer(models.Model):
     id = models.AutoField(primary_key=True)
     alias = models.CharField(max_length=255, null=True)
@@ -95,3 +99,28 @@ class Farmer(models.Model):
     phone = models.CharField(max_length=255)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
+
+
+# Machine model
+class Machine(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    added_on = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+
+
+# Milling model
+class Milled(models.Model):
+    id = models.AutoField(primary_key=True)
+    farmer_id = models.ForeignKey(Farmer, on_delete=models.CASCADE)
+    farmer_name = models.CharField(max_length=255)
+    machine_id = models.ForeignKey(Machine, on_delete=models.CASCADE)
+    kgs = models.CharField(max_length=255)
+    output = models.CharField(max_length=255)
+    price = models.CharField(max_length=255)
+    amount = models.CharField(max_length=255)
+    refferal = models.CharField(max_length=255, null=True)
+    mill_date = models.DateField()
+    added_on = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+
