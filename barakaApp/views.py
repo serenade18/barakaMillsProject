@@ -15,8 +15,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from barakaApp.models import UserAccount, OTP, Farmer
-from barakaApp.serializers import UserAccountSerializer, UserCreateSerializer, FarmerSerializer
+from barakaApp.models import UserAccount, OTP, Farmer, Machine, Milled
+from barakaApp.serializers import UserAccountSerializer, UserCreateSerializer, FarmerSerializer, MachineSerializer, \
+    MilledSerializer
 
 User = get_user_model()
 
@@ -461,6 +462,10 @@ class AccountsUserViewSet(viewsets.ViewSet):
 class FarmerViewSet(viewsets.ViewSet):
     permission_classes_by_action = {'create': [IsAuthenticated], 'list': [IsAuthenticated], 'update': [IsAuthenticated], 'destroy': [IsAdminUser], 'default': [IsAuthenticated]}
 
+    def get_permissions(self):
+        return [permission() for permission in
+                self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
+
     pagination_class = PageNumberPagination()
 
     def list(self, request):
@@ -512,3 +517,118 @@ class FarmerViewSet(viewsets.ViewSet):
         farmer = get_object_or_404(queryset, pk=pk)
         farmer.delete()
         return Response({"error": False, "message": "Farmer Deleted"})
+
+
+# Machine viewset
+class MachineViewSet(viewsets.ViewSet):
+    permission_classes_by_action = {
+        'create': [IsAdminUser],
+        'list': [IsAuthenticated],
+        'update': [IsAdminUser],
+        'destroy': [IsAdminUser],
+        'default': [IsAuthenticated]
+    }
+
+    def get_permissions(self):
+        return [permission() for permission in
+                self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
+
+    # List all machines
+    def list(self, request):
+        machine = Machine.objects.all()
+        serializer = MachineSerializer(machine, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # Create a new machine instance
+    def create(self, request):
+        serializer = MachineSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Retrieve a specific machine
+    def retrieve(self, request, pk=None):
+        try:
+            machine = get_object_or_404(Machine, pk=pk)
+            serializer = MachineSerializer(machine)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Machine.DoesNotExist:
+            return Response({'error': 'Machine point not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Update a machine
+    def update(self, request, pk=None):
+        try:
+            machine = get_object_or_404(Machine, pk=pk)
+            serializer = MachineSerializer(machine, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"message": "Machine updated successfully", "data": serializer.data},
+                                status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Machine.DoesNotExist:
+            return Response({"error": True, "message": "Delivery point not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Delete a machine
+    def destroy(self, request, pk=None):
+        machine = get_object_or_404(Machine, pk=pk)
+        machine.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Machine viewset
+class MilledViewSet(viewsets.ViewSet):
+    permission_classes_by_action = {
+        'create': [IsAuthenticated],
+        'list': [IsAuthenticated],
+        'update': [IsAdminUser],
+        'destroy': [IsAdminUser],
+        'default': [IsAuthenticated]
+    }
+
+    def get_permissions(self):
+        return [permission() for permission in
+                self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
+
+    # List all milled
+    def list(self, request):
+        milled = Milled.objects.all()
+        serializer = MilledSerializer(milled, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # Create a new milled instance
+    def create(self, request):
+        serializer = MachineSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Retrieve a specific delivery point
+    def retrieve(self, request, pk=None):
+        try:
+            milled = get_object_or_404(Milled, pk=pk)
+            serializer = MilledSerializer(milled)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Milled.DoesNotExist:
+            return Response({'error': 'Milled instance not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Update a delivery point
+    def update(self, request, pk=None):
+        try:
+            milled = get_object_or_404(Milled, pk=pk)
+            serializer = MilledSerializer(milled, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"message": "Milled instance updated successfully", "data": serializer.data},
+                                status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Milled.DoesNotExist:
+            return Response({"error": True, "message": "Milled instance not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Delete a delivery point
+    def destroy(self, request, pk=None):
+        milled = get_object_or_404(Milled, pk=pk)
+        milled.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
