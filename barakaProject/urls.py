@@ -5,13 +5,16 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from barakaApp.views import AdminUserViewSet, SalesUserViewSet, HybridUserViewSet, UserInfoView, FarmerViewSet
+from barakaApp.views import AdminUserViewSet, SalesUserViewSet, HybridUserViewSet, UserInfoView, FarmerViewSet, \
+    MachineViewSet, MilledViewSet
 
 router = routers.DefaultRouter()
 router.register(r'admin/users', AdminUserViewSet, basename='admin-user')
 router.register(r'hybrid/users', HybridUserViewSet, basename='bar-user')
 router.register(r'sales/users', SalesUserViewSet, basename='liquor-store-user')
 router.register(r'farmers', FarmerViewSet, basename='farmers')
+router.register(r'machines', MachineViewSet, basename='machines')
+router.register(r'milling', MilledViewSet, basename='milling')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
