@@ -6,7 +6,7 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from barakaApp.views import AdminUserViewSet, SalesUserViewSet, HybridUserViewSet, UserInfoView, FarmerViewSet, \
-    MachineViewSet, MilledViewSet
+    MachineViewSet, MilledViewSet, FarmerOnlyViewSet, FarmerNameViewSet
 
 router = routers.DefaultRouter()
 router.register(r'admin/users', AdminUserViewSet, basename='admin-user')
@@ -25,4 +25,6 @@ urlpatterns = [
     path('api/hybrid/verify/', HybridUserViewSet.as_view({'post': 'verify_otp'}), name='hybrid-verify'),
     path('api/sales/verify/', SalesUserViewSet.as_view({'post': 'verify_otp'}), name='sales-verify'),
     path('api/userinfo/', UserInfoView.as_view(), name='userinfo'),
+    path('api/farmeronly/', FarmerOnlyViewSet.as_view(), name="farmeronly"),
+    path('api/farmername/', FarmerNameViewSet.as_view(), name="farmername"),
 ]
