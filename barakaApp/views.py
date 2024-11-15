@@ -525,8 +525,10 @@ class FarmerNameViewSet(generics.ListAPIView):
     serializer_class = FarmerSerializer
 
     def get_queryset(self):
-        name = self.kwargs["name"]
-        return Farmer.objects.filter(name__contains=name)
+        name = self.request.query_params.get("name")  # Access query parameters
+        if name:
+            return Farmer.objects.filter(name__icontains=name)
+        return Farmer.objects.all()
 
 
 # Machine viewset
