@@ -520,6 +520,15 @@ class FarmerOnlyViewSet(generics.ListAPIView):
         return Farmer.objects.all()
 
 
+# Farmer name viewset
+class FarmerNameViewSet(generics.ListAPIView):
+    serializer_class = FarmerSerializer
+
+    def get_queryset(self):
+        name = self.kwargs["name"]
+        return Farmer.objects.filter(name__contains=name)
+
+
 # Machine viewset
 class MachineViewSet(viewsets.ViewSet):
     permission_classes_by_action = {
