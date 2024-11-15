@@ -512,6 +512,14 @@ class FarmerViewSet(viewsets.ViewSet):
         return Response({"error": False, "message": "Farmer Deleted"})
 
 
+# Farmer only viewset
+class FarmerOnlyViewSet(generics.ListAPIView):
+    serializer_class = FarmerSerializer
+
+    def get_queryset(self):
+        return Farmer.objects.all()
+
+
 # Machine viewset
 class MachineViewSet(viewsets.ViewSet):
     permission_classes_by_action = {
