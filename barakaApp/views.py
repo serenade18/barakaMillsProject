@@ -589,6 +589,25 @@ class MachineViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Farmer only viewset
+class MachineOnlyViewSet(generics.ListAPIView):
+    serializer_class = MachineSerializer
+
+    def get_queryset(self):
+        return Machine.objects.all()
+
+
+# Machine name viewset
+class MachineNameViewSet(generics.ListAPIView):
+    serializer_class = MachineSerializer
+
+    def get_queryset(self):
+        name = self.request.query_params.get("name")  # Access query parameters
+        if name:
+            return Machine.objects.filter(name__icontains=name)
+        return Machine.objects.all()
+
+
 # Milled viewset
 class MilledViewSet(viewsets.ViewSet):
     permission_classes_by_action = {
@@ -611,7 +630,7 @@ class MilledViewSet(viewsets.ViewSet):
 
     # Create a new milled instance
     def create(self, request):
-        serializer = MachineSerializer(data=request.data)
+        serializer = MilledSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
