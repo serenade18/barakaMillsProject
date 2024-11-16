@@ -664,3 +664,21 @@ class MilledViewSet(viewsets.ViewSet):
         milled = get_object_or_404(Milled, pk=pk)
         milled.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Dashboard viewset
+class DashboardViewsSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    # List total farmers in the system
+    def get(self, request):
+        farmer = Farmer.objects.all()
+        farmer_serializer = FarmerSerializer(farmer, many=True, context={"request": request})
+
+        dict_response = {
+            "error": False,
+            "message": "Home page data",
+            "farmer": len(farmer_serializer.data),
+        }
+        return Response(dict_response)
