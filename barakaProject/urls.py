@@ -6,7 +6,8 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from barakaApp.views import AdminUserViewSet, SalesUserViewSet, HybridUserViewSet, UserInfoView, FarmerViewSet, \
-    MachineViewSet, MilledViewSet, FarmerOnlyViewSet, FarmerNameViewSet, MachineOnlyViewSet, MachineNameViewSet
+    MachineViewSet, MilledViewSet, FarmerOnlyViewSet, FarmerNameViewSet, MachineOnlyViewSet, MachineNameViewSet, \
+    DashboardViewsSet
 
 router = routers.DefaultRouter()
 router.register(r'admin/users', AdminUserViewSet, basename='admin-user')
@@ -15,6 +16,7 @@ router.register(r'sales/users', SalesUserViewSet, basename='liquor-store-user')
 router.register(r'farmers', FarmerViewSet, basename='farmers')
 router.register(r'machines', MachineViewSet, basename='machines')
 router.register(r'milling', MilledViewSet, basename='milling')
+router.register(r'dashboard', DashboardViewsSet, basename='dashboard')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

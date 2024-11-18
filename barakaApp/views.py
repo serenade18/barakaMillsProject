@@ -624,9 +624,12 @@ class MilledViewSet(viewsets.ViewSet):
 
     # List all milled
     def list(self, request):
-        milled = Milled.objects.all()
-        serializer = MilledSerializer(milled, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        milling = Milled.objects.all()
+        serializer = MilledSerializer(milling, many=True, context={"request": request})
+        response_data = serializer.data
+        response_dict = {"error": False, "message": "All Milling List Data", "data": response_data}
+        return Response(response_dict)
+
 
     # Create a new milled instance
     def create(self, request):
@@ -668,11 +671,17 @@ class MilledViewSet(viewsets.ViewSet):
 
 # Dashboard viewset
 class DashboardViewsSet(viewsets.ViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes_by_action = {
+        'list': [IsAdminUser],
+        'default': [IsAuthenticated]
+    }
+
+    def get_permissions(self):
+        return [permission() for permission in
+                self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
 
     # List total farmers in the system
-    def get(self, request):
+    def list(self, request):
         farmer = Farmer.objects.all()
         farmer_serializer = FarmerSerializer(farmer, many=True, context={"request": request})
 
