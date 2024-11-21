@@ -95,8 +95,8 @@ class Farmer(models.Model):
     id = models.AutoField(primary_key=True)
     alias = models.CharField(max_length=255, null=True)
     farmer_number = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
+    name = models.CharField(max_length=255,  unique=True)
+    phone = models.CharField(max_length=255,  unique=True)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
