@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from barakaApp.models import Farmer, Milled, Machine
+from barakaApp.models import Farmer, Milled, Machine, Payments
 
 User = get_user_model()
 
@@ -65,4 +65,17 @@ class MilledSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         response["farmer"] = FarmerSerializer(instance.farmer_id).data
         response["machine"] = MachineSerializer(instance.machine_id).data
+        return response
+
+
+# Payment serializer
+class PaymentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payments
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response["milling"] = MilledSerializer(instance.orders_id).data
+        response["farmer"] = FarmerSerializer(instance.customer_id).data
         return response
