@@ -15,9 +15,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from barakaApp.models import UserAccount, OTP, Farmer, Machine, Milled
+from barakaApp.models import UserAccount, OTP, Farmer, Machine, Milled, Payments
 from barakaApp.serializers import UserAccountSerializer, UserCreateSerializer, FarmerSerializer, MachineSerializer, \
-    MilledSerializer
+    MilledSerializer, PaymentsSerializer
 
 User = get_user_model()
 
@@ -496,6 +496,11 @@ class FarmerViewSet(viewsets.ViewSet):
         milling_details = Milled.objects.filter(farmer_id=serializer_data["id"]).order_by('-id')
         milling_details_serializers = MilledSerializer(milling_details, many=True)
         serializer_data["milling"] = milling_details_serializers.data
+
+        # Accessing All the Payment Details of Current Farmer
+        payments_details = Payments.objects.filter(farmer_id=serializer_data["id"]).order_by('-id')
+        payments_details_serializers = PaymentsSerializer(payments_details, many=True)
+        serializer_data["payments"] = payments_details_serializers.data
 
         # Accessing all kgs of current farmer
         kgs_total = Milled.objects.filter(farmer_id=serializer_data["id"])
