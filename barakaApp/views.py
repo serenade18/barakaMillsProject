@@ -489,8 +489,24 @@ class FarmerViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         queryset = Farmer.objects.all()
         farmer = get_object_or_404(queryset, pk=pk)
-        serializer = FarmerSerializer(farmer)
-        return Response(serializer.data)
+        serializer = FarmerSerializer(farmer,  context={"request": request})
+
+        serializer_data = serializer.data
+        # Accessing All the Milling Details of Current Farmer
+        milling_details = Milled.objects.filter(farmer_id=serializer_data["id"]).order_by('-id')
+        milling_details_serializers = MilledSerializer(milling_details, many=True)
+        serializer_data["milling"] = milling_details_serializers.data
+
+        # Accessing all kgs of current farmer
+        kgs_total = Milled.objects.filter(farmer_id=serializer_data["id"])
+        kgs = 0
+        output = 0
+        for total in kgs_total:
+            kgs = kgs + float(total.kgs)
+            output = output + float(total.output)
+
+        return Response({
+            "error": False, "message": "Single Data Fetch", "kgs": kgs, "output": output, "data": serializer_data })
 
     def update(self, request, pk=None):
         try:

@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.db.models import AutoField
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
@@ -124,3 +125,15 @@ class Milled(models.Model):
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
+
+# Payment model
+class Payments(models.Model):
+    choices = ((1, "Cash"), (2, "Mpesa"), (3, "Bank"), (4, "Barter Trade"), (5, "Promo"), (6, "Compensation"), (7, "Top-up"))
+
+    id = models.AutoField(primary_key=True)
+    farmer_id = models.ForeignKey(Farmer, on_delete=models.CASCADE)
+    payment_mode = models.CharField(choices=choices, max_length=255)
+    payment = models.CharField(max_length=255)
+    milling_id = models.ForeignKey(Milled, on_delete=models.CASCADE)
+    added_on = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
