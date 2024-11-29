@@ -98,6 +98,7 @@ class Farmer(models.Model):
     farmer_number = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=255,  unique=True)
+    refferal = models.CharField(max_length=255, null=True)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
@@ -120,7 +121,6 @@ class Milled(models.Model):
     output = models.CharField(max_length=255)
     price = models.CharField(max_length=255)
     amount = models.CharField(max_length=255)
-    refferal = models.CharField(max_length=255, null=True)
     mill_date = models.DateField()
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
