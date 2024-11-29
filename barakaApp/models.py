@@ -94,9 +94,9 @@ class OTP(models.Model):
 # Farmer model
 class Farmer(models.Model):
     id = models.AutoField(primary_key=True)
-    alias = models.CharField(max_length=255, null=True)
+    alias = models.CharField(max_length=255, null=True,  unique=True)
     farmer_number = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=255,  unique=True)
+    name = models.CharField(max_length=255)
     phone = models.CharField(max_length=255,  unique=True)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
