@@ -477,12 +477,17 @@ class FarmerViewSet(viewsets.ViewSet):
 
     def create(self, request):
         try:
-            serializer = FarmerSerializer(data=request.data, context={"request": request})
+            # Ensure referral is optional
+            data = request.data.copy()
+            if "refferal" not in data or not data["refferal"]:
+                data["refferal"] = None  # Handle missing or empty referral field
+
+            serializer = FarmerSerializer(data=data, context={"request": request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             dict_response = {"error": False, "message": "Farmers Data Saved Successfully"}
-        except:
-            dict_response = {"error": True, "message": "Error During Saving Farmers Data"}
+        except Exception as e:
+            dict_response = {"error": True, "message": f"Error During Saving Farmers Data: {str(e)}"}
 
         return Response(dict_response)
 
