@@ -717,3 +717,18 @@ class DashboardViewsSet(viewsets.ViewSet):
             "farmer": len(farmer_serializer.data),
         }
         return Response(dict_response)
+
+
+# Payment viewset
+class PaymentViewSet(viewsets.ViewSet):
+    permission_classes_by_action = {
+        'create': [IsAuthenticated],
+        'list': [IsAuthenticated],
+        'update': [IsAuthenticated],
+        'destroy': [IsAdminUser],
+        'default': [IsAuthenticated]
+    }
+
+    def get_permissions(self):
+        return [permission() for permission in
+                self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]

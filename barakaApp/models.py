@@ -128,7 +128,7 @@ class Milled(models.Model):
 
 # Payment model
 class Payments(models.Model):
-    choices = ((1, "Cash"), (2, "Mpesa"), (3, "Bank"), (4, "Barter Trade"), (5, "Promo"), (6, "Compensation"), (7, "Top-up"))
+    choices = ((1, "Cash"), (2, "Mpesa"), (3, "Bank"), (4, "KCB"), (5, "Equity"), (6, "Others"))
 
     id = models.AutoField(primary_key=True)
     farmer_id = models.ForeignKey(Farmer, on_delete=models.CASCADE)
