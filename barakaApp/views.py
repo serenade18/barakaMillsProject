@@ -656,7 +656,6 @@ class MilledViewSet(viewsets.ViewSet):
         response_dict = {"error": False, "message": "All Milling List Data", "data": response_data}
         return Response(response_dict)
 
-
     # Create a new milled instance
     def create(self, request):
         serializer = MilledSerializer(data=request.data)
@@ -732,3 +731,19 @@ class PaymentViewSet(viewsets.ViewSet):
     def get_permissions(self):
         return [permission() for permission in
                 self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
+
+    # List all payment
+    def list(self, request):
+        payment = Payments.objects.all()
+        serializer = PaymentsSerializer(payment, many=True, context={"request": request})
+        response_data = serializer.data
+        response_dict = {"error": False, "message": "All payment List Data", "data": response_data}
+        return Response(response_dict)
+
+    # Create a new payment instance
+    def create(self, request):
+        serializer = PaymentsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
