@@ -106,10 +106,10 @@ class OTP(models.Model):
 class Farmer(models.Model):
     id = models.AutoField(primary_key=True)
     alias = models.CharField(max_length=255, null=True, unique=True)
-    farmer_number = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255, unique=True)
-    secondary_phone = models.CharField(max_length=255, unique=True, default=0)
+    farmer_number = models.CharField(max_length=255, unique=True, null=True)
+    name = models.CharField(max_length=255, null=True,)
+    phone = models.CharField(max_length=255, unique=True, null=True)
+    secondary_phone = models.CharField(max_length=255, unique=True, default=0, null=True,)
     refferal = models.CharField(max_length=255, null=True)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
@@ -157,12 +157,15 @@ class Milled(models.Model):
 
 # Payment model
 class Payments(models.Model):
-    choices = ((1, "Cash"), (2, "Mpesa"), (3, "Bank"), (4, "KCB"), (5, "Equity"), (6, "Others"))
+    choices = ((1, "Cash"), (2, "Mpesa"), (3, "KCB"), (4, "Equity"), (5, "Almanis Tier A"),\
+               (6, "Almanis Tier B"), (7, "Others"))
 
     id = models.AutoField(primary_key=True)
     farmer_id = models.ForeignKey(Farmer, on_delete=models.CASCADE)
     payment_mode = models.CharField(choices=choices, max_length=255)
     payment = models.CharField(max_length=255)
+    amount = models.CharField(max_length=255, default=0)
+    kilos = models.CharField(max_length=255, default=0)
     milling_id = models.ForeignKey(Milled, on_delete=models.CASCADE)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()

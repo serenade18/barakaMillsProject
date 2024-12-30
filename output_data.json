@@ -1,0 +1,2199 @@
+[
+    {
+        "model": "barakaApp.farmer",
+        "pk": 1,
+        "fields": {
+            "alias": "WA JEMI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 2,
+        "fields": {
+            "alias": "WA EVA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 3,
+        "fields": {
+            "alias": "KUONGA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 4,
+        "fields": {
+            "alias": "WA MAMBO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 5,
+        "fields": {
+            "alias": "DEMPER",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 6,
+        "fields": {
+            "alias": "B MUGO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 7,
+        "fields": {
+            "alias": "WA EMMA/MUNYAGA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 8,
+        "fields": {
+            "alias": "WA MUTHONI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 9,
+        "fields": {
+            "alias": "WA VICTOR",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 10,
+        "fields": {
+            "alias": "GAKUO/KINGS",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 11,
+        "fields": {
+            "alias": "MK WAIRIMU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 12,
+        "fields": {
+            "alias": "JOYCE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 13,
+        "fields": {
+            "alias": "RIMO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 14,
+        "fields": {
+            "alias": "WA STEVE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 15,
+        "fields": {
+            "alias": "WA MWANGI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 16,
+        "fields": {
+            "alias": "ALICE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 17,
+        "fields": {
+            "alias": "MORTIMER",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 18,
+        "fields": {
+            "alias": "VWB WAIRIMU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 19,
+        "fields": {
+            "alias": "MAGGIE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 20,
+        "fields": {
+            "alias": "JORAM",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 21,
+        "fields": {
+            "alias": "WAMU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 22,
+        "fields": {
+            "alias": "WA GATUGO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 23,
+        "fields": {
+            "alias": "WA NGANGA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 24,
+        "fields": {
+            "alias": "MUNENE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 25,
+        "fields": {
+            "alias": "NJERI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 26,
+        "fields": {
+            "alias": "XY/HMM/WA NYAWIRA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 27,
+        "fields": {
+            "alias": "WA BEN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 28,
+        "fields": {
+            "alias": "NJOGU CIRU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 29,
+        "fields": {
+            "alias": "WA TABBY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 30,
+        "fields": {
+            "alias": "BLESSING",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 31,
+        "fields": {
+            "alias": "ALLAN 2024",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 32,
+        "fields": {
+            "alias": "MICHAEL",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 33,
+        "fields": {
+            "alias": "LEON",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 34,
+        "fields": {
+            "alias": "FRAZIA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 35,
+        "fields": {
+            "alias": "KIANGWACI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 36,
+        "fields": {
+            "alias": "TUMBO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 37,
+        "fields": {
+            "alias": "MUTITHI-JUNIOR",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 38,
+        "fields": {
+            "alias": "ANGELA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 39,
+        "fields": {
+            "alias": "NICE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 40,
+        "fields": {
+            "alias": "JUSTER RIMO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 41,
+        "fields": {
+            "alias": "NAOMI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 42,
+        "fields": {
+            "alias": "LUCYLINE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 43,
+        "fields": {
+            "alias": "WA TONNY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 44,
+        "fields": {
+            "alias": "WA DERICK",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 45,
+        "fields": {
+            "alias": "TR NDUTA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 46,
+        "fields": {
+            "alias": "WA KIMENJO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 47,
+        "fields": {
+            "alias": "PERIS",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 48,
+        "fields": {
+            "alias": "TREVOR",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 49,
+        "fields": {
+            "alias": "JANE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 50,
+        "fields": {
+            "alias": "WA NJANAKE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 51,
+        "fields": {
+            "alias": "MWIGANANIA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 52,
+        "fields": {
+            "alias": "JOHN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 53,
+        "fields": {
+            "alias": "ALMANIS",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 54,
+        "fields": {
+            "alias": "WA ESTHER",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 55,
+        "fields": {
+            "alias": "DOWA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 56,
+        "fields": {
+            "alias": "KOBIA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 57,
+        "fields": {
+            "alias": "CEASER",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 58,
+        "fields": {
+            "alias": "BONYO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 59,
+        "fields": {
+            "alias": "DOCTOR",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 60,
+        "fields": {
+            "alias": "FGCK",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 61,
+        "fields": {
+            "alias": "TERESIA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 62,
+        "fields": {
+            "alias": "WA KELVIN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 63,
+        "fields": {
+            "alias": "NDUNGU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 64,
+        "fields": {
+            "alias": "KIRAGU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 65,
+        "fields": {
+            "alias": "PAPHEY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 66,
+        "fields": {
+            "alias": "WAITHAKA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 67,
+        "fields": {
+            "alias": "NJOGU(J.J GRP)",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 68,
+        "fields": {
+            "alias": "WA KELVIN_1",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 69,
+        "fields": {
+            "alias": "TR KIMANI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 70,
+        "fields": {
+            "alias": "CLAIRE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 71,
+        "fields": {
+            "alias": "KAMAU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 72,
+        "fields": {
+            "alias": "WA MURIMI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 73,
+        "fields": {
+            "alias": "ESTHER EWM",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 74,
+        "fields": {
+            "alias": "WA LENNY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 75,
+        "fields": {
+            "alias": "ISAIAH",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 76,
+        "fields": {
+            "alias": "STL VWB",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 77,
+        "fields": {
+            "alias": "NJAMBI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 78,
+        "fields": {
+            "alias": "CUCU MICERE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 79,
+        "fields": {
+            "alias": "WA PETER",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 80,
+        "fields": {
+            "alias": "WA RUTERE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 81,
+        "fields": {
+            "alias": "SHEE 4401 A",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 82,
+        "fields": {
+            "alias": "STELLAH 3218",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 83,
+        "fields": {
+            "alias": "MARY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 84,
+        "fields": {
+            "alias": "CEDRICK",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 85,
+        "fields": {
+            "alias": "ROSA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 86,
+        "fields": {
+            "alias": "TR GICHIGO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 87,
+        "fields": {
+            "alias": "JOAN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 88,
+        "fields": {
+            "alias": "WAWA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 89,
+        "fields": {
+            "alias": "ROBERT/Y KSONGA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 90,
+        "fields": {
+            "alias": "NJOKI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 91,
+        "fields": {
+            "alias": "WA ABI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 92,
+        "fields": {
+            "alias": "LAMBA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 93,
+        "fields": {
+            "alias": "LOVE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 94,
+        "fields": {
+            "alias": "TR MWANGI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 95,
+        "fields": {
+            "alias": "NJIRU/SNK",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 96,
+        "fields": {
+            "alias": "TR KARIUKI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 97,
+        "fields": {
+            "alias": "NGAI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 98,
+        "fields": {
+            "alias": "TIGER",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 99,
+        "fields": {
+            "alias": "WA TERRY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 100,
+        "fields": {
+            "alias": "KITHINJI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 101,
+        "fields": {
+            "alias": "WA LOPEZ",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 102,
+        "fields": {
+            "alias": "MARY MURIUKI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 103,
+        "fields": {
+            "alias": "RWS",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 104,
+        "fields": {
+            "alias": "GILBERT",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 105,
+        "fields": {
+            "alias": "WA ENI/POLLY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 106,
+        "fields": {
+            "alias": "CHOMBA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 107,
+        "fields": {
+            "alias": "WA IVY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 108,
+        "fields": {
+            "alias": "DR KENDA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 109,
+        "fields": {
+            "alias": "ZWM ZWEHA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 110,
+        "fields": {
+            "alias": "WA NDUNGU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 111,
+        "fields": {
+            "alias": "HELLEN LEON",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 112,
+        "fields": {
+            "alias": "WA NJIRU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 113,
+        "fields": {
+            "alias": "SHIKU VWB",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 114,
+        "fields": {
+            "alias": "HWK",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 115,
+        "fields": {
+            "alias": "ALLAN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 116,
+        "fields": {
+            "alias": "WA RYAN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 117,
+        "fields": {
+            "alias": "HELLEN WANGU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 118,
+        "fields": {
+            "alias": "NJERI WACHIRA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 119,
+        "fields": {
+            "alias": "MURUGI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 120,
+        "fields": {
+            "alias": "GM",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 121,
+        "fields": {
+            "alias": "KGK  KAMAU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 122,
+        "fields": {
+            "alias": "JAS",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 123,
+        "fields": {
+            "alias": "EUNICE BN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 124,
+        "fields": {
+            "alias": "WA ERICK/ AGNES",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 125,
+        "fields": {
+            "alias": "DMM",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 126,
+        "fields": {
+            "alias": "SOPHIA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 127,
+        "fields": {
+            "alias": "SUSAN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 128,
+        "fields": {
+            "alias": "BECKY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 129,
+        "fields": {
+            "alias": "SOSBAN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 130,
+        "fields": {
+            "alias": "HELLEN DAN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 131,
+        "fields": {
+            "alias": "ROSE LENNY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 132,
+        "fields": {
+            "alias": "WA BRIAN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 133,
+        "fields": {
+            "alias": "DAMA/JORAM",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 134,
+        "fields": {
+            "alias": "BRMS",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 135,
+        "fields": {
+            "alias": "SUPA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 136,
+        "fields": {
+            "alias": "WA MUSA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 137,
+        "fields": {
+            "alias": "KINYUA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 138,
+        "fields": {
+            "alias": "G KARANGA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 139,
+        "fields": {
+            "alias": "KENNEDY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 140,
+        "fields": {
+            "alias": "MIKI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 141,
+        "fields": {
+            "alias": "MUGO",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 142,
+        "fields": {
+            "alias": "WA BRENDA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 143,
+        "fields": {
+            "alias": "MILKA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 144,
+        "fields": {
+            "alias": "MAMA WANJA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 145,
+        "fields": {
+            "alias": "KEN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 146,
+        "fields": {
+            "alias": "MERCY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 147,
+        "fields": {
+            "alias": "SHJ",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 148,
+        "fields": {
+            "alias": "KIBUI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 149,
+        "fields": {
+            "alias": "WA MBURU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 150,
+        "fields": {
+            "alias": "MAINA FRAZIA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 151,
+        "fields": {
+            "alias": "AMK EMMA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 152,
+        "fields": {
+            "alias": "WA TURI TERRY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 153,
+        "fields": {
+            "alias": "WA LENA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 154,
+        "fields": {
+            "alias": "REV/ JW",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 155,
+        "fields": {
+            "alias": "CEASER ELIZA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 156,
+        "fields": {
+            "alias": "RIMO MOREEN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 157,
+        "fields": {
+            "alias": "WAK",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 158,
+        "fields": {
+            "alias": "NANCY",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 159,
+        "fields": {
+            "alias": "SALIM  KAMENYA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 160,
+        "fields": {
+            "alias": "RANGU",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 161,
+        "fields": {
+            "alias": "WA CIRU BLESSING",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 162,
+        "fields": {
+            "alias": "PAUL  BLESSING",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 163,
+        "fields": {
+            "alias": "HR",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 164,
+        "fields": {
+            "alias": "DOMINIC",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 165,
+        "fields": {
+            "alias": "WA JOHN",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 166,
+        "fields": {
+            "alias": "WA GRACE",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 167,
+        "fields": {
+            "alias": "WA ZEDI",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 168,
+        "fields": {
+            "alias": "ELICK MBAKA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    },
+    {
+        "model": "barakaApp.farmer",
+        "pk": 169,
+        "fields": {
+            "alias": "SOFIA",
+            "farmer_number": null,
+            "name": null,
+            "phone": null,
+            "secondary_phone": null,
+            "refferal": null,
+            "added_on": "2024-12-28T21:27:00.122250"
+        }
+    }
+]

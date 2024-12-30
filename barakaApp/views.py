@@ -664,7 +664,7 @@ class MilledViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # Retrieve a specific delivery point
+    # Retrieve a milling
     def retrieve(self, request, pk=None):
         try:
             milled = get_object_or_404(Milled, pk=pk)
@@ -673,7 +673,7 @@ class MilledViewSet(viewsets.ViewSet):
         except Milled.DoesNotExist:
             return Response({'error': 'Milled instance not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # Update a delivery point
+    # Update a milling instance
     def update(self, request, pk=None):
         try:
             milled = get_object_or_404(Milled, pk=pk)
@@ -687,7 +687,7 @@ class MilledViewSet(viewsets.ViewSet):
         except Milled.DoesNotExist:
             return Response({"error": True, "message": "Milled instance not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    # Delete a delivery point
+    # Delete a milling instance
     def destroy(self, request, pk=None):
         milled = get_object_or_404(Milled, pk=pk)
         milled.delete()
@@ -747,3 +747,32 @@ class PaymentViewSet(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Retrieve a payment
+    def retrieve(self, request, pk=None):
+        try:
+            payment = get_object_or_404(Milled, pk=pk)
+            serializer = PaymentsSerializer(payment)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Milled.DoesNotExist:
+            return Response({'error': 'Payment instance not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Update a milling instance
+    def update(self, request, pk=None):
+        try:
+            payment = get_object_or_404(Milled, pk=pk)
+            serializer = PaymentsSerializer(payment, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"message": "Payments instance updated successfully", "data": serializer.data},
+                                status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Payments.DoesNotExist:
+            return Response({"error": True, "message": "Payments instance not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Delete a milling instance
+    def destroy(self, request, pk=None):
+        payment = get_object_or_404(Payments, pk=pk)
+        payment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

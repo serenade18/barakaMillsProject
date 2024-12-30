@@ -78,6 +78,6 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        response["milling"] = MilledSerializer(instance.orders_id).data
-        response["farmer"] = FarmerSerializer(instance.customer_id).data
+        response["milling"] = MilledSerializer(instance.milling_id).data
+        response["farmer"] = FarmerSerializer(instance.farmer_id).data
         return response
