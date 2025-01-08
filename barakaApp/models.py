@@ -91,18 +91,6 @@ class OTP(models.Model):
         return timezone.now() < self.created_at + timedelta(minutes=10)  # OTP valid for 10 minutes
 
 
-# Farmer model
-# class Farmer(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     alias = models.CharField(max_length=255, null=True,  unique=True)
-#     farmer_number = models.CharField(max_length=255, unique=True)
-#     name = models.CharField(max_length=255)
-#     phone = models.CharField(max_length=255,  unique=True)
-#     secondary_phone = models.CharField(max_length=255,  unique=True, default=0)
-#     refferal = models.CharField(max_length=255, null=True)
-#     added_on = models.DateTimeField(auto_now_add=True)
-#     objects = models.Manager()
-
 class Farmer(models.Model):
     id = models.AutoField(primary_key=True)
     alias = models.CharField(max_length=255, null=True, unique=True)
@@ -165,7 +153,7 @@ class Payments(models.Model):
     payment_mode = models.CharField(choices=choices, max_length=255)
     payment = models.CharField(max_length=255)
     amount = models.CharField(max_length=255, default=0)
-    kilos = models.CharField(max_length=255, default=0)
+    receipt_number = models.CharField(max_length=255, default=0)
     milling_id = models.ForeignKey(Milled, on_delete=models.CASCADE)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()

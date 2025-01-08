@@ -511,12 +511,28 @@ class FarmerViewSet(viewsets.ViewSet):
         kgs_total = Milled.objects.filter(farmer_id=serializer_data["id"])
         kgs = 0
         output = 0
+        amount = 0
         for total in kgs_total:
-            kgs = kgs + float(total.kgs)
-            output = output + float(total.output)
+            kgs += float(total.kgs)
+            output += float(total.output)
+            amount += float(total.amount)
 
+        # Accessing total payments of current farmer
+        total_payment = Payments.objects.filter(farmer_id= serializer_data["id"])
+        payment = 0
+        for total_payed in total_payment:
+            payment += float(total_payed.payment)
+
+        balance = amount - payment
         return Response({
-            "error": False, "message": "Single Data Fetch", "kgs": kgs, "output": output, "data": serializer_data })
+            "error": False,
+            "message": "Single Data Fetch",
+            "kgs": kgs,
+            "output": output,
+            "payed_total": payment,
+            "balance": balance,
+            "data": serializer_data
+        })
 
     def update(self, request, pk=None):
         try:
