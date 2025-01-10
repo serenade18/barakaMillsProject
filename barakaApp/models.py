@@ -132,7 +132,6 @@ class Machine(models.Model):
 class Milled(models.Model):
     id = models.AutoField(primary_key=True)
     farmer_id = models.ForeignKey(Farmer, on_delete=models.CASCADE)
-    farmer_name = models.CharField(max_length=255)
     machine_id = models.ForeignKey(Machine, on_delete=models.CASCADE)
     kgs = models.CharField(max_length=255)
     output = models.CharField(max_length=255)
@@ -151,6 +150,7 @@ class Payments(models.Model):
     id = models.AutoField(primary_key=True)
     farmer_id = models.ForeignKey(Farmer, on_delete=models.CASCADE)
     payment_mode = models.CharField(choices=choices, max_length=255)
+    kilos = models.CharField(max_length=255, default=0)
     payment = models.CharField(max_length=255)
     amount = models.CharField(max_length=255, default=0)
     receipt_number = models.CharField(max_length=255, default=0)

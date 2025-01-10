@@ -7,6 +7,8 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets, status, generics, permissions
+
+from django.db.models import Q, Sum, F, DecimalField, Subquery, OuterRef, FloatField
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
@@ -723,37 +725,79 @@ class DashboardViewsSet(viewsets.ViewSet):
 
     # List total farmers in the system
     def list(self, request):
+        # Get total farmers
         farmer = Farmer.objects.all()
         farmer_serializer = FarmerSerializer(farmer, many=True, context={"request": request})
+
+        # Get total milled kilos and amount
+        milled = Milled.objects.all()
+        kgs = 0
+        amount = 0
+        milling_revenue = 0
+        for total in milled:
+            kgs += float(total.kgs)
+            amount += float(total.amount)
+            milling_revenue += float(total.price) * float(total.kgs)
+
+        # Get total payments
+        payed = Payments.objects.all()
+        payment = 0
+        for full_payment in payed:
+            payment += float(full_payment.payment)
+
+        # Get total balance
+        balance = amount - payment
 
         dict_response = {
             "error": False,
             "message": "Home page data",
             "farmer": len(farmer_serializer.data),
+            "total_milled": kgs,
+            "total_amount": amount,
+            "total_payment": payment,
+            "total_balance": balance,
+            "milling_revenue": milling_revenue
         }
         return Response(dict_response)
 
 
 # Payment viewset
 class PaymentViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {
-        'create': [IsAuthenticated],
-        'list': [IsAuthenticated],
-        'update': [IsAuthenticated],
-        'destroy': [IsAdminUser],
-        'default': [IsAuthenticated]
-    }
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination()
 
-    def get_permissions(self):
-        return [permission() for permission in
-                self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
-
-    # List all payment
     def list(self, request):
-        payment = Payments.objects.all()
-        serializer = PaymentsSerializer(payment, many=True, context={"request": request})
-        response_data = serializer.data
-        response_dict = {"error": False, "message": "All payment List Data", "data": response_data}
+        paginator = self.pagination_class
+        search_query = request.query_params.get('search', None)
+        payments_query = Payments.objects.all().order_by('-id')
+
+        # Implementing the search functionality:
+        if search_query is not None:
+            if search_query.isdigit():
+                # Search by orders_id if the search query is a number
+                payments_query = payments_query.filter(
+                    Q(orders_id__id=search_query)
+                )
+            else:
+                # Search by other fields for non-numeric queries
+                payments_query = payments_query.filter(
+                    Q(paying_number__icontains=search_query)
+                )
+
+        page = paginator.paginate_queryset(payments_query, request, view=self)
+        if page is not None:
+            serializer = PaymentsSerializer(page, many=True, context={"request": request})
+            response_data = paginator.get_paginated_response(serializer.data).data
+        else:
+            serializer = PaymentsSerializer(payments_query, many=True, context={"request": request})
+            response_data = serializer.data
+
+        response_dict = {
+            "error": False,
+            "message": "All Payments List Data",
+            "data": response_data
+        }
         return Response(response_dict)
 
     # Create a new payment instance
