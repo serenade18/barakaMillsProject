@@ -811,16 +811,16 @@ class PaymentViewSet(viewsets.ViewSet):
     # Retrieve a payment
     def retrieve(self, request, pk=None):
         try:
-            payment = get_object_or_404(Milled, pk=pk)
+            payment = get_object_or_404(Payments, pk=pk)
             serializer = PaymentsSerializer(payment)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Milled.DoesNotExist:
+        except Payments.DoesNotExist:
             return Response({'error': 'Payment instance not found'}, status=status.HTTP_404_NOT_FOUND)
 
     # Update a milling instance
     def update(self, request, pk=None):
         try:
-            payment = get_object_or_404(Milled, pk=pk)
+            payment = get_object_or_404(Payments, pk=pk)
             serializer = PaymentsSerializer(payment, data=request.data)
             if serializer.is_valid():
                 serializer.save()
