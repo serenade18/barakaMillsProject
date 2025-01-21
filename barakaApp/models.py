@@ -153,6 +153,7 @@ class Payments(models.Model):
     kilos = models.CharField(max_length=255, default=0)
     payment = models.CharField(max_length=255)
     amount = models.CharField(max_length=255, default=0)
+    price = models.CharField(max_length=255, default=2.50)
     receipt_number = models.CharField(max_length=255, default=0)
     milling_id = models.ForeignKey(Milled, on_delete=models.CASCADE)
     added_on = models.DateTimeField(auto_now_add=True)
