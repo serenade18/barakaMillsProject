@@ -668,7 +668,7 @@ class MilledViewSet(viewsets.ViewSet):
 
     # List all milled
     def list(self, request):
-        milling = Milled.objects.all()
+        milling = Milled.objects.all().order_by('-id')
         serializer = MilledSerializer(milling, many=True, context={"request": request})
         response_data = serializer.data
         response_dict = {"error": False, "message": "All Milling List Data", "data": response_data}
