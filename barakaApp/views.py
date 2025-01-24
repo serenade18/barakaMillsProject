@@ -864,3 +864,32 @@ class YearlyDataViewSet(viewsets.ViewSet):
         }
 
         return Response(dict_response)
+
+
+# Monthly chart
+class MonthlyDataViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        month_dates = Milled.objects.order_by().values("mill_date__month", "mill_date__year").distinct()
+        month_kilos_chart_list = []
+        for month in month_dates:
+            access_month = month["mill_date__month"]
+            access_year = month["mill_date__year"]
+
+            month_data = Milled.objects.filter(mill_date__month=access_month, mill_date__year=access_year)
+            month_kilos = 0
+            access_date = date(year=access_year, month=access_month, day=1)
+            for month_single in month_data:
+                month_kilos += float(month_single.kgs)
+
+            month_kilos_chart_list.append({"date": access_date, "amt": month_kilos})
+
+        dict_response = {
+            "error": False,
+            "message": "Monthly Data",
+            "month_kilos_chart": month_kilos_chart_list,
+        }
+
+        return Response(dict_response)
