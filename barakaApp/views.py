@@ -1,5 +1,5 @@
 import random
-from datetime import timedelta
+from datetime import timedelta, date
 
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -836,3 +836,31 @@ class PaymentViewSet(viewsets.ViewSet):
         payment = get_object_or_404(Payments, pk=pk)
         payment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# yearly chart
+class YearlyDataViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        year_dates = Milled.objects.order_by().values("mill_date__year").distinct()
+        year_kilos_chart_list = []
+        for year in year_dates:
+            access_year = year["mill_date__year"]
+
+            year_data = Milled.objects.filter(mill_date__year=access_year)
+            year_kilos = 0
+            access_year_date = date(year=access_year, month=1, day=1)
+            for year_single in year_data:
+                year_kilos += float(year_single.kgs)
+
+            year_kilos_chart_list.append({"date": access_year_date, "amt": year_kilos})
+
+        dict_response = {
+            "error": False,
+            "message": "Yearly Data",
+            "year_kilos": year_kilos_chart_list
+        }
+
+        return Response(dict_response)
