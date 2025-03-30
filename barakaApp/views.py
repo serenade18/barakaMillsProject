@@ -1,5 +1,5 @@
 import random
-from datetime import timedelta
+from datetime import timedelta, date
 
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -759,7 +759,7 @@ class MilledViewSet(viewsets.ViewSet):
 
     # List all milled
     def list(self, request):
-        milling = Milled.objects.all()
+        milling = Milled.objects.all().order_by('-id')
         serializer = MilledSerializer(milling, many=True, context={"request": request})
         response_data = serializer.data
         response_dict = {"error": False, "message": "All Milling List Data", "data": response_data}
@@ -927,3 +927,60 @@ class PaymentViewSet(viewsets.ViewSet):
         payment = get_object_or_404(Payments, pk=pk)
         payment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# yearly chart
+class YearlyDataViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        year_dates = Milled.objects.order_by().values("mill_date__year").distinct()
+        year_kilos_chart_list = []
+        for year in year_dates:
+            access_year = year["mill_date__year"]
+
+            year_data = Milled.objects.filter(mill_date__year=access_year)
+            year_kilos = 0
+            access_year_date = date(year=access_year, month=1, day=1)
+            for year_single in year_data:
+                year_kilos += float(year_single.kgs)
+
+            year_kilos_chart_list.append({"date": access_year_date, "amt": year_kilos})
+
+        dict_response = {
+            "error": False,
+            "message": "Yearly Data",
+            "year_kilos": year_kilos_chart_list
+        }
+
+        return Response(dict_response)
+
+
+# Monthly chart
+class MonthlyDataViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        month_dates = Milled.objects.order_by().values("mill_date__month", "mill_date__year").distinct()
+        month_kilos_chart_list = []
+        for month in month_dates:
+            access_month = month["mill_date__month"]
+            access_year = month["mill_date__year"]
+
+            month_data = Milled.objects.filter(mill_date__month=access_month, mill_date__year=access_year)
+            month_kilos = 0
+            access_date = date(year=access_year, month=access_month, day=1)
+            for month_single in month_data:
+                month_kilos += float(month_single.kgs)
+
+            month_kilos_chart_list.append({"date": access_date, "amt": month_kilos})
+
+        dict_response = {
+            "error": False,
+            "message": "Monthly Data",
+            "month_kilos_chart": month_kilos_chart_list,
+        }
+
+        return Response(dict_response)
