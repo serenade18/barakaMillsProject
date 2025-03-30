@@ -619,9 +619,8 @@ class FarmerViewSet(viewsets.ViewSet):
 
         return Response(response_dict)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], url_path='total-balance')
     def total_balance(self, request):
-        # Calculate the total balance of all customers with a positive balance
         farmers_with_balance = Farmer.objects.annotate(
             total_milled=Subquery(
                 Milled.objects.filter(farmer_id=OuterRef('id'))
@@ -634,15 +633,14 @@ class FarmerViewSet(viewsets.ViewSet):
             total_payments=Subquery(
                 Payments.objects.filter(farmer_id=OuterRef('id'))
                 .values('farmer_id')
-                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2))
-                          )
+                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2)))
                 .values('total')
             )
         ).annotate(
             balance=F('total_milled') - F('total_payments')
-        ).filter(balance__gt=0).order_by('id')
+        ).order_by('id')  # Remove filtering for balance > 0
 
-        total_balance = farmers_with_balance.aggregate(total_balance=Sum('balance'))['total_balance']
+        total_balance = farmers_with_balance.aggregate(total_balance=Sum('balance'))['total_balance'] or 0
 
         return Response({"total_balance": total_balance})
 
@@ -984,3 +982,69 @@ class MonthlyDataViewSet(viewsets.ViewSet):
         }
 
         return Response(dict_response)
+
+
+# Positive Balance
+class TotalPositiveBalanceView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Calculate the total positive balance
+        total_balance = Farmer.objects.annotate(
+            total_milled=Subquery(
+                Milled.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(
+                    total=Sum(F('amount'), output_field=DecimalField(max_digits=10, decimal_places=2)))
+                .values('total')
+            ),
+            total_payments=Subquery(
+                Payments.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2)))
+                .values('total')
+            )
+        ).annotate(
+            balance=F('total_milled') - F('total_payments')
+        ).filter(balance__gt=0).aggregate(total_positive_balance=Sum('balance'))
+
+        # Rest of the code for additional data can be added here
+        # Example: Calculate profit, count orders, and other statistics
+
+        # Serialize the data and create a response dictionary
+        response_data = {
+            "total_positive_balance": total_balance['total_positive_balance'],
+            # Add more data here as needed
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+# Negative Balance
+class TotalNegativeBalanceView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Calculate the total positive balance
+        total_balance = Farmer.objects.annotate(
+            total_milled=Subquery(
+                Milled.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(
+                    total=Sum(F('amount'), output_field=DecimalField(max_digits=10, decimal_places=2)))
+                .values('total')
+            ),
+            total_payments=Subquery(
+                Payments.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2)))
+                .values('total')
+            )
+        ).annotate(
+            balance=F('total_milled') - F('total_payments')
+        ).filter(balance__lt=0).aggregate(total_negative_balance=Sum('balance'))
+
+        return Response({"total_negative_balance": total_balance['total_negative_balance']}, status=status.HTTP_200_OK)
+

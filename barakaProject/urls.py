@@ -7,7 +7,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from barakaApp.views import AdminUserViewSet, SalesUserViewSet, HybridUserViewSet, UserInfoView, FarmerViewSet, \
     MachineViewSet, MilledViewSet, FarmerOnlyViewSet, FarmerNameViewSet, MachineOnlyViewSet, MachineNameViewSet, \
-    DashboardViewsSet, PaymentViewSet, YearlyDataViewSet, MonthlyDataViewSet
+    DashboardViewsSet, PaymentViewSet, YearlyDataViewSet, MonthlyDataViewSet, TotalPositiveBalanceView, \
+    TotalNegativeBalanceView
 
 router = routers.DefaultRouter()
 router.register(r'admin/users', AdminUserViewSet, basename='admin-user')
@@ -37,4 +38,6 @@ urlpatterns = [
     path('api/farmers/farmers-with-balance/', FarmerViewSet.as_view({'get': 'farmers_with_balance'}), name='farmers-with-balance'),
     path('api/farmers/farmers-with-excess/', FarmerViewSet.as_view({'get': 'farmers_with_excess'}), name='farmers-with-excess'),
     path('api/farmers/total-balance/', FarmerViewSet.as_view({'get': 'total_balance'}), name='total-balance'),
+    path('api/underpaid/', TotalPositiveBalanceView.as_view(), name="underpaid"),
+    path('api/overpaid/', TotalNegativeBalanceView.as_view(), name="overpaid")
 ]
