@@ -555,6 +555,97 @@ class FarmerViewSet(viewsets.ViewSet):
         farmer.delete()
         return Response({"error": False, "message": "Farmer Deleted"})
 
+    @action(detail=False, methods=['get'], url_path='farmers-with-balance')
+    def farmers_with_balance(self, request):
+        # Calculate the balance for each farmer with a positive balance
+        farmers_with_balance = Farmer.objects.annotate(
+            total_milled=Subquery(
+                Milled.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(total=Sum(F('amount'), output_field=DecimalField(max_digits=10, decimal_places=2)))
+                .values('total')
+            ),
+            total_payments=Subquery(
+                Payments.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2))
+                          )
+                .values('total')
+            )
+        ).annotate(
+            balance=F('total_milled') - F('total_payments')
+        ).filter(balance__gt=0).order_by('id')
+
+        # Serialize the data
+        serializer = FarmerSerializer(farmers_with_balance, many=True, context={"request": request})
+
+        # Append the balance to each farmer's data in the serialized response
+        data_with_balance = serializer.data
+        for farmer_data, balance in zip(data_with_balance, farmers_with_balance.values_list('balance', flat=True)):
+            farmer_data['balance'] = balance
+        response_dict = {"error": False, "message": "Farmers with Balance > 0", "data": data_with_balance}
+
+        return Response(response_dict)
+
+    @action(detail=False, methods=['get'], url_path='farmers-with-excess')
+    def farmers_with_excess(self, request):
+        # Calculate the balance for each farmer with an excess balance
+        farmers_with_excess = Farmer.objects.annotate(
+            total_milled=Subquery(
+                Milled.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(total=Sum(F('amount'), output_field=DecimalField(max_digits=10, decimal_places=2)))
+                .values('total')
+            ),
+            total_payments=Subquery(
+                Payments.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2))
+                          )
+                .values('total')
+            )
+        ).annotate(
+            balance=F('total_milled') - F('total_payments')
+        ).filter(balance__lt=0).order_by('id')
+
+        # Serialize the data
+        serializer = FarmerSerializer(farmers_with_excess, many=True, context={"request": request})
+
+        # Append the balance to each farmer's data in the serialized response
+        data_with_balance = serializer.data
+        for farmer_data, balance in zip(data_with_balance, farmers_with_excess.values_list('balance', flat=True)):
+            farmer_data['balance'] = balance
+        response_dict = {"error": False, "message": "Farmers with Balance < 0", "data": data_with_balance}
+
+        return Response(response_dict)
+
+    @action(detail=False, methods=['get'])
+    def total_balance(self, request):
+        # Calculate the total balance of all customers with a positive balance
+        farmers_with_balance = Farmer.objects.annotate(
+            total_milled=Subquery(
+                Milled.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(
+                    total=Sum(F('amount'), output_field=DecimalField(max_digits=10, decimal_places=2))
+                )
+                .values('total')
+            ),
+            total_payments=Subquery(
+                Payments.objects.filter(farmer_id=OuterRef('id'))
+                .values('farmer_id')
+                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2))
+                          )
+                .values('total')
+            )
+        ).annotate(
+            balance=F('total_milled') - F('total_payments')
+        ).filter(balance__gt=0).order_by('id')
+
+        total_balance = farmers_with_balance.aggregate(total_balance=Sum('balance'))['total_balance']
+
+        return Response({"total_balance": total_balance})
+
 
 # Farmer only viewset
 class FarmerOnlyViewSet(generics.ListAPIView):

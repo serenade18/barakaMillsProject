@@ -32,4 +32,7 @@ urlpatterns = [
     path('api/farmername/', FarmerNameViewSet.as_view(), name="farmername"),
     path('api/machineonly/', MachineOnlyViewSet.as_view(), name="machineonly"),
     path('api/machinename/', MachineNameViewSet.as_view(), name="machinename"),
+    path('api/farmers/farmers-with-balance/', FarmerViewSet.as_view({'get': 'farmers_with_balance'}), name='farmers-with-balance'),
+    path('api/farmers/farmers-with-excess/', FarmerViewSet.as_view({'get': 'farmers_with_excess'}), name='farmers-with-excess'),
+    path('api/farmers/total-balance/', FarmerViewSet.as_view({'get': 'total_balance'}), name='total-balance'),
 ]
