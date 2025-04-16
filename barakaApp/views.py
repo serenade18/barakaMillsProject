@@ -4,11 +4,12 @@ from datetime import timedelta, date
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
+from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets, status, generics, permissions
 
-from django.db.models import Q, Sum, F, DecimalField, Subquery, OuterRef, FloatField
+from django.db.models import Q, Sum, F, DecimalField, Subquery, OuterRef, ExpressionWrapper, Value
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
@@ -1055,35 +1056,83 @@ class FarmersWithPositiveBalanceViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        # Calculate the balance for each farmer
+        total_milled_subquery = Milled.objects.filter(
+            farmer_id=OuterRef('id')
+        ).values('farmer_id').annotate(
+            total=Sum('amount')
+        ).values('total')[:1]
+
+        total_payments_subquery = Payments.objects.filter(
+            farmer_id=OuterRef('id')
+        ).values('farmer_id').annotate(
+            total=Sum('payment')
+        ).values('total')[:1]
+
         farmers_with_balance = Farmer.objects.annotate(
-            total_milled=Subquery(
-                Milled.objects.filter(farmer_id=OuterRef('id'))
-                .values('farmer_id')
-                .annotate(
-                    total=Sum(F('amount'), output_field=DecimalField(max_digits=10, decimal_places=2)))
-                .values('total')
+            total_milled=Coalesce(
+                Subquery(total_milled_subquery, output_field=DecimalField(max_digits=10, decimal_places=2)),
+                Value(0),
+                output_field=DecimalField(max_digits=10, decimal_places=2)
             ),
-            total_payments=Subquery(
-                Payments.objects.filter(farmer_id=OuterRef('id'))
-                .values('farmer_id')
-                .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2)))
-                .values('total')
+            total_payments=Coalesce(
+                Subquery(total_payments_subquery, output_field=DecimalField(max_digits=10, decimal_places=2)),
+                Value(0),
+                output_field=DecimalField(max_digits=10, decimal_places=2)
             )
         ).annotate(
-            balance=F('total_milled') - F('total_payments')
+            balance=ExpressionWrapper(
+                F('total_milled') - F('total_payments'),
+                output_field=DecimalField(max_digits=10, decimal_places=2)
+            )
         ).filter(balance__gt=0).order_by('id')
 
-        # Serialize the data
         serializer = FarmerSerializer(farmers_with_balance, many=True, context={"request": request})
-
-        # Append the balance to each farmer's data in the serialized response
         data_with_balance = serializer.data
-        for farmer_data, balance in zip(data_with_balance, farmers_with_balance.values_list('balance', flat=True)):
-            farmer_data['balance'] = balance
-        response_dict = {"error": False, "message": "All Debtors List Data", "data": data_with_balance}
 
-        return Response(response_dict)
+        for farmer_data, balance in zip(data_with_balance, farmers_with_balance.values_list('balance', flat=True)):
+            farmer_data['balance'] = float(balance)
+
+        return Response({
+            "error": False,
+            "message": "All Debtors List Data",
+            "data": data_with_balance
+        })
+
+
+# class FarmersWithPositiveBalanceViewSet(viewsets.ViewSet):
+#     authentication_classes = [JWTAuthentication]
+#     permission_classes = [IsAuthenticated]
+#
+#     def list(self, request):
+#         # Calculate the balance for each farmer
+#         farmers_with_balance = Farmer.objects.annotate(
+#             total_milled=Subquery(
+#                 Milled.objects.filter(farmer_id=OuterRef('id'))
+#                 .values('farmer_id')
+#                 .annotate(
+#                     total=Sum(F('amount'), output_field=DecimalField(max_digits=10, decimal_places=2)))
+#                 .values('total')
+#             ),
+#             total_payments=Subquery(
+#                 Payments.objects.filter(farmer_id=OuterRef('id'))
+#                 .values('farmer_id')
+#                 .annotate(total=Sum('payment', output_field=DecimalField(max_digits=10, decimal_places=2)))
+#                 .values('total')
+#             )
+#         ).annotate(
+#             balance=F('total_milled') - F('total_payments')
+#         ).filter(balance__gt=0).order_by('id')
+#
+#         # Serialize the data
+#         serializer = FarmerSerializer(farmers_with_balance, many=True, context={"request": request})
+#
+#         # Append the balance to each farmer's data in the serialized response
+#         data_with_balance = serializer.data
+#         for farmer_data, balance in zip(data_with_balance, farmers_with_balance.values_list('balance', flat=True)):
+#             farmer_data['balance'] = balance
+#         response_dict = {"error": False, "message": "All Debtors List Data", "data": data_with_balance}
+#
+#         return Response(response_dict)
 
 
 # Farmers with Negative Balance
