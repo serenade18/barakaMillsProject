@@ -9,7 +9,8 @@ from barakaApp import views
 from barakaApp.views import AdminUserViewSet, SalesUserViewSet, HybridUserViewSet, UserInfoView, FarmerViewSet, \
     MachineViewSet, MilledViewSet, FarmerOnlyViewSet, FarmerNameViewSet, MachineOnlyViewSet, MachineNameViewSet, \
     DashboardViewsSet, PaymentViewSet, YearlyDataViewSet, MonthlyDataViewSet, TotalPositiveBalanceView, \
-    TotalNegativeBalanceView, FarmersWithNegativeBalanceViewSet, FarmersWithPositiveBalanceViewSet
+    TotalNegativeBalanceView, FarmersWithNegativeBalanceViewSet, FarmersWithPositiveBalanceViewSet, \
+    DailyMillsPerMachineViewSet
 
 router = routers.DefaultRouter()
 router.register(r'admin/users', AdminUserViewSet, basename='admin-user')
@@ -20,6 +21,7 @@ router.register(r'machines', MachineViewSet, basename='machines')
 router.register(r'milling', MilledViewSet, basename='milling')
 router.register(r'payments', PaymentViewSet, basename='payments')
 router.register(r'dashboard', DashboardViewsSet, basename='dashboard')
+router.register(r'kilos-mill', DailyMillsPerMachineViewSet, basename='kilos-mill')
 router.register(r'yearly_chart', YearlyDataViewSet, basename="yearly_chart")
 router.register(r'monthly_chart', MonthlyDataViewSet, basename="monthly_chart")
 router.register("debtors", FarmersWithPositiveBalanceViewSet, basename="debtors")
