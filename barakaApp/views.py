@@ -950,34 +950,66 @@ class DailyMillsPerMachineViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        milled_data = Milled.objects.all()
-        grouped_data = defaultdict(lambda: defaultdict(float))  # {date: {machine_name: total_kgs}}
+        today = date.today()
+        milled_data = Milled.objects.filter(added_on__date=today)
+        machine_kgs_map = defaultdict(float)
 
         for record in milled_data:
             try:
-                date_key = record.mill_date
                 machine_name = record.machine_id.name
                 kgs = float(record.kgs)
-
-                grouped_data[date_key][machine_name] += kgs
+                machine_kgs_map[machine_name] += kgs
             except (ValueError, AttributeError):
-                # Skip records with invalid kgs or missing machine name
                 continue
 
-        daily_mills_chart = []
-        for date_key, machines in grouped_data.items():
-            for machine_name, total_kgs in machines.items():
-                daily_mills_chart.append({
-                    "date": date_key,
-                    "machine": machine_name,
-                    "amt": total_kgs
-                })
+        daily_mills_chart = [
+            {
+                "date": today,
+                "machine": machine_name,
+                "kgs": total_kgs
+            }
+            for machine_name, total_kgs in machine_kgs_map.items()
+        ]
 
         return Response({
             "error": False,
-            "message": "Daily Mills Per Machine",
+            "message": f"Daily kilos per machine for {today}",
             "daily_mills": daily_mills_chart
         })
+
+# class DailyMillsPerMachineViewSet(viewsets.ViewSet):
+#     authentication_classes = [JWTAuthentication]
+#     permission_classes = [IsAuthenticated]
+#
+#     def list(self, request):
+#         milled_data = Milled.objects.all()
+#         grouped_data = defaultdict(lambda: defaultdict(float))  # {date: {machine_name: total_kgs}}
+#
+#         for record in milled_data:
+#             try:
+#                 date_key = record.mill_date
+#                 machine_name = record.machine_id.name
+#                 kgs = float(record.kgs)
+#
+#                 grouped_data[date_key][machine_name] += kgs
+#             except (ValueError, AttributeError):
+#                 # Skip records with invalid kgs or missing machine name
+#                 continue
+#
+#         daily_mills_chart = []
+#         for date_key, machines in grouped_data.items():
+#             for machine_name, total_kgs in machines.items():
+#                 daily_mills_chart.append({
+#                     "date": date_key,
+#                     "machine": machine_name,
+#                     "kgs": total_kgs
+#                 })
+#
+#         return Response({
+#             "error": False,
+#             "message": "Daily Mills Per Machine",
+#             "daily_mills": daily_mills_chart
+#         })
 
 
 # yearly chart
