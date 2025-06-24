@@ -5,7 +5,7 @@ from datetime import timedelta, date
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, TruncDate, Cast
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets, status, generics, permissions
@@ -942,6 +942,73 @@ class PaymentViewSet(viewsets.ViewSet):
         payment = get_object_or_404(Payments, pk=pk)
         payment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Daily kilos per mill
+class DailyMillsPerMachineViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        today = date.today()
+        milled_data = Milled.objects.filter(added_on__date=today)
+        machine_kgs_map = defaultdict(float)
+
+        for record in milled_data:
+            try:
+                machine_name = record.machine_id.name
+                kgs = float(record.kgs)
+                machine_kgs_map[machine_name] += kgs
+            except (ValueError, AttributeError):
+                continue
+
+        daily_mills_chart = [
+            {
+                "date": today,
+                "machine": machine_name,
+                "kgs": total_kgs
+            }
+            for machine_name, total_kgs in machine_kgs_map.items()
+        ]
+
+        return Response({
+            "error": False,
+            "message": f"Daily kilos per machine for {today}",
+            "daily_mills": daily_mills_chart
+        })
+
+
+# Monthly kilos per mill
+class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        milled_data = Milled.objects.all()
+        grouped_data = defaultdict(lambda: defaultdict(float))  # {month: {machine_name: total_kgs}}
+
+        for record in milled_data:
+            try:
+                # Convert mill_date to 'YYYY-MM' format
+                month_key = record.mill_date.strftime('%Y-%m')
+                machine_name = record.machine_id.name
+                kgs = float(record.kgs)
+
+                grouped_data[month_key][machine_name] += kgs
+            except (ValueError, AttributeError):
+                continue
+
+        monthly_mills_chart = []
+        for month_key, machines in grouped_data.items():
+            entry = {"month": month_key}
+            entry.update(machines)  # Flatten machine totals into the same dict
+            monthly_mills_chart.append(entry)
+
+        return Response({
+            "error": False,
+            "message": "Monthly Mills Per Machine",
+            "monthly_mills": monthly_mills_chart
+        })
 
 
 # yearly chart
