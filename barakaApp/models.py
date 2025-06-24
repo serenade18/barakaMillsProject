@@ -91,6 +91,7 @@ class OTP(models.Model):
         return timezone.now() < self.created_at + timedelta(minutes=10)  # OTP valid for 10 minutes
 
 
+# farmer model
 class Farmer(models.Model):
     id = models.AutoField(primary_key=True)
     alias = models.CharField(max_length=255, null=True, unique=True)

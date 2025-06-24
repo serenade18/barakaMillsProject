@@ -978,40 +978,7 @@ class DailyMillsPerMachineViewSet(viewsets.ViewSet):
         })
 
 
-# Monthly kilos per mill
-class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def list(self, request):
-        milled_data = Milled.objects.all()
-        grouped_data = defaultdict(lambda: defaultdict(float))  # {month: {machine_name: total_kgs}}
-
-        for record in milled_data:
-            try:
-                # Convert mill_date to 'YYYY-MM' format
-                month_key = record.mill_date.strftime('%Y-%m')
-                machine_name = record.machine_id.name
-                kgs = float(record.kgs)
-
-                grouped_data[month_key][machine_name] += kgs
-            except (ValueError, AttributeError):
-                continue
-
-        monthly_mills_chart = []
-        for month_key, machines in grouped_data.items():
-            entry = {"month": month_key}
-            entry.update(machines)  # Flatten machine totals into the same dict
-            monthly_mills_chart.append(entry)
-
-        return Response({
-            "error": False,
-            "message": "Monthly Mills Per Machine",
-            "monthly_mills": monthly_mills_chart
-        })
-
-
-# yearly chart
+# Yearly kilos payment chart
 class YearlyDataViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -1028,18 +995,33 @@ class YearlyDataViewSet(viewsets.ViewSet):
             for year_single in year_data:
                 year_kilos += float(year_single.kgs)
 
-            year_kilos_chart_list.append({"date": access_year_date, "amt": year_kilos})
+            year_kilos_chart_list.append({"date": access_year_date, "kilos": year_kilos})
+
+        # Yearly Payments
+        year_payment_dates = Payments.objects.order_by().values("added_on__year").distinct()
+        year_payments_chart_list = []
+        for payment in year_payment_dates:
+            access_year = payment["added_on__year"]
+
+            year_data = Payments.objects.filter(added_on__year=access_year)
+            year_payment = 0
+            access_date = date(year=access_year, month=1, day=1)
+            for payment_single in year_data:
+                year_payment += float(payment_single.payment)
+
+            year_payments_chart_list.append({"date": access_date, "amt": year_payment})
 
         dict_response = {
             "error": False,
             "message": "Yearly Data",
-            "year_kilos": year_kilos_chart_list
+            "year_kilos": year_kilos_chart_list,
+            "year_payments": year_payments_chart_list
         }
 
         return Response(dict_response)
 
 
-# Monthly chart
+# Monthly kilos and payment chart
 class MonthlyDataViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
@@ -1057,18 +1039,34 @@ class MonthlyDataViewSet(viewsets.ViewSet):
             for month_single in month_data:
                 month_kilos += float(month_single.kgs)
 
-            month_kilos_chart_list.append({"date": access_date, "amt": month_kilos})
+            month_kilos_chart_list.append({"date": access_date, "kilos": month_kilos})
+
+        # Monthly Payments
+        month_payment_dates = Payments.objects.order_by().values("added_on__month", "added_on__year").distinct()
+        month_payments_chart_list = []
+        for payment in month_payment_dates:
+            access_month = payment["added_on__month"]
+            access_year = payment["added_on__year"]
+
+            month_data = Payments.objects.filter(added_on__month=access_month, added_on__year=access_year)
+            month_payment = 0
+            access_date = date(year=access_year, month=access_month, day=1)
+            for payment_single in month_data:
+                month_payment += float(payment_single.payment)
+
+            month_payments_chart_list.append({"date": access_date, "amt": month_payment})
 
         dict_response = {
             "error": False,
             "message": "Monthly Data",
             "month_kilos_chart": month_kilos_chart_list,
+            "month_payments_chart": month_payments_chart_list,
         }
 
         return Response(dict_response)
 
 
-# monthly kilos
+# monthly kilos per machine
 class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
