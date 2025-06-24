@@ -1007,7 +1007,7 @@ class YearlyDataViewSet(viewsets.ViewSet):
             year_payment = 0
             access_date = date(year=access_year, month=1, day=1)
             for payment_single in year_data:
-                year_payment += float(payment_single.payment)
+                year_payment += float(payment_single.amount)
 
             year_payments_chart_list.append({"date": access_date, "amt": year_payment})
 
@@ -1052,7 +1052,7 @@ class MonthlyDataViewSet(viewsets.ViewSet):
             month_payment = 0
             access_date = date(year=access_year, month=access_month, day=1)
             for payment_single in month_data:
-                month_payment += float(payment_single.payment)
+                month_payment += float(payment_single.amount)
 
             month_payments_chart_list.append({"date": access_date, "amt": month_payment})
 
