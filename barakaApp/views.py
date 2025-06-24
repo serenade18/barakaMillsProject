@@ -1,4 +1,5 @@
 import random
+from collections import defaultdict
 from datetime import timedelta, date
 
 from django.contrib.auth import get_user_model
@@ -998,6 +999,39 @@ class MonthlyDataViewSet(viewsets.ViewSet):
         }
 
         return Response(dict_response)
+
+
+# monthly kilos
+class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        milled_data = Milled.objects.all()
+        grouped_data = defaultdict(lambda: defaultdict(float))  # {month: {machine_name: total_kgs}}
+
+        for record in milled_data:
+            try:
+                # Convert mill_date to 'YYYY-MM' format
+                month_key = record.mill_date.strftime('%Y-%m')
+                machine_name = record.machine_id.name
+                kgs = float(record.kgs)
+
+                grouped_data[month_key][machine_name] += kgs
+            except (ValueError, AttributeError):
+                continue
+
+        monthly_mills_chart = []
+        for month_key, machines in grouped_data.items():
+            entry = {"month": month_key}
+            entry.update(machines)  # Flatten machine totals into the same dict
+            monthly_mills_chart.append(entry)
+
+        return Response({
+            "error": False,
+            "message": "Monthly Mills Per Machine",
+            "monthly_mills": monthly_mills_chart
+        })
 
 
 # Positive Balance
