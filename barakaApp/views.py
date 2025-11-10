@@ -1110,6 +1110,50 @@ class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
         })
 
 
+# monthly kilos per machine
+class YearlyMillsPerMachineViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        milled_data = Milled.objects.all()
+        grouped_kgs = defaultdict(lambda: defaultdict(float))  # {month: {machine_name: total_kgs}}
+        grouped_amount = defaultdict(lambda: defaultdict(float))
+
+        for record in milled_data:
+            try:
+                # Convert mill_date to 'YYYY-MM' format
+                year_key = record.mill_date.strftime('%Y')
+                machine_name = record.machine_id.name
+                kgs = float(record.kgs)
+                amount = float(record.amount)
+
+                grouped_kgs[year_key][machine_name] += kgs
+                grouped_amount[year_key][machine_name] += amount
+            except (ValueError, AttributeError):
+                continue
+
+        yearly_mills_chart = []
+        for year_key, machines in grouped_kgs.items():
+            entry = {"year": year_key}
+            entry.update(machines)  # Flatten machine totals into the same dict
+            yearly_mills_chart.append(entry)
+
+        # Prepare chart data for amount
+        yearly_mills_amount_chart = []
+        for year_key, machines in grouped_amount.items():
+            entry = {"year": year_key}
+            entry.update(machines)
+            yearly_mills_amount_chart.append(entry)
+
+        return Response({
+            "error": False,
+            "message": "Monthly Mills Per Machine",
+            "yearly_mills": yearly_mills_chart,
+            "yearly_mills_amount": yearly_mills_amount_chart
+        })
+
+
 # Positive Balance
 class TotalPositiveBalanceView(APIView):
     authentication_classes = [JWTAuthentication]
