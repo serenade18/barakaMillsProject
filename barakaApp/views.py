@@ -1073,7 +1073,8 @@ class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
 
     def list(self, request):
         milled_data = Milled.objects.all()
-        grouped_data = defaultdict(lambda: defaultdict(float))  # {month: {machine_name: total_kgs}}
+        grouped_kgs = defaultdict(lambda: defaultdict(float))  # {month: {machine_name: total_kgs}}
+        grouped_amount = defaultdict(lambda: defaultdict(float))
 
         for record in milled_data:
             try:
@@ -1081,21 +1082,31 @@ class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
                 month_key = record.mill_date.strftime('%Y-%m')
                 machine_name = record.machine_id.name
                 kgs = float(record.kgs)
+                amount = float(record.amount)
 
-                grouped_data[month_key][machine_name] += kgs
+                grouped_kgs[month_key][machine_name] += kgs
+                grouped_amount[month_key][machine_name] += amount
             except (ValueError, AttributeError):
                 continue
 
         monthly_mills_chart = []
-        for month_key, machines in grouped_data.items():
+        for month_key, machines in grouped_kgs.items():
             entry = {"month": month_key}
             entry.update(machines)  # Flatten machine totals into the same dict
             monthly_mills_chart.append(entry)
 
+        # Prepare chart data for amount
+        monthly_mills_amount_chart = []
+        for month_key, machines in grouped_amount.items():
+            entry = {"month": month_key}
+            entry.update(machines)
+            monthly_mills_amount_chart.append(entry)
+
         return Response({
             "error": False,
             "message": "Monthly Mills Per Machine",
-            "monthly_mills": monthly_mills_chart
+            "monthly_mills": monthly_mills_chart,
+            "monthly_mills_amount": monthly_mills_amount_chart
         })
 
 
