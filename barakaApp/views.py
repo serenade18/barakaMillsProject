@@ -473,10 +473,23 @@ class FarmerViewSet(viewsets.ViewSet):
     pagination_class = PageNumberPagination()
 
     def list(self, request):
+        search = request.query_params.get("search")
+
         farmers = Farmer.objects.all()
+
+        if search:
+            farmers = farmers.filter(
+                Q(name__icontains=search) |
+                Q(alias__icontains=search)
+            )
+
         serializer = FarmerSerializer(farmers, many=True, context={"request": request})
-        response_data = serializer.data
-        response_dict = {"error": False, "message": "All Farmers List Data", "data": response_data}
+
+        response_dict = {
+            "error": False,
+            "message": "All Farmers List Data",
+            "data": serializer.data
+        }
         return Response(response_dict)
 
     def create(self, request):
