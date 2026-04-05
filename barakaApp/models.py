@@ -95,11 +95,11 @@ class OTP(models.Model):
 class Farmer(models.Model):
     id = models.AutoField(primary_key=True)
     alias = models.CharField(max_length=255, null=True, unique=True)
-    farmer_number = models.CharField(max_length=255, unique=True, null=True)
+    farmer_number = models.CharField(max_length=255, unique=True, null=True, blank=True)
     name = models.CharField(max_length=255, null=True,)
     phone = models.CharField(max_length=255, unique=True, null=True)
-    secondary_phone = models.CharField(max_length=255, unique=True, default=0, null=True,)
-    refferal = models.CharField(max_length=255, null=True)
+    secondary_phone = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    refferal = models.CharField(max_length=255, null=True, blank=True)
     added_on = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 

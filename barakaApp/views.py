@@ -5,7 +5,7 @@ from datetime import timedelta, date
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
-from django.db.models.functions import Coalesce, TruncDate, Cast
+from django.db.models.functions import Coalesce, TruncDate, Cast, ExtractYear, ExtractMonth
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets, status, generics, permissions
@@ -511,6 +511,16 @@ class FarmerViewSet(viewsets.ViewSet):
         payments_details_serializers = PaymentsSerializer(payments_details, many=True)
         serializer_data["payments"] = payments_details_serializers.data
 
+        # Access Millings per year
+        millings_by_year = Milled.objects.filter(farmer_id=serializer_data["id"]).annotate(
+            year=ExtractYear('added_on')).values('year').annotate(total_kilos=Sum('kgs')).order_by('year')
+
+        # Access monthly Farmers kilos
+        millings_by_month = Milled.objects.filter(farmer_id=serializer_data["id"]).annotate(
+            year=ExtractYear('added_on'),
+            month=ExtractMonth('added_on')
+        ).values('year', 'month').annotate(total_kilos=Sum('kgs')).order_by('year', 'month')
+
         # Accessing all kgs of current farmer
         kgs_total = Milled.objects.filter(farmer_id=serializer_data["id"])
         kgs = 0
@@ -532,6 +542,8 @@ class FarmerViewSet(viewsets.ViewSet):
             "error": False,
             "message": "Single Data Fetch",
             "kgs": kgs,
+            "millings_by_year": list(millings_by_year),
+            "millings_by_month": list(millings_by_month),
             "output": output,
             "payed_total": payment,
             "balance": balance,
