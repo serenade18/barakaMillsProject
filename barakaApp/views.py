@@ -462,6 +462,13 @@ class AccountsUserViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Pagination class
+class FiftyPerPagePagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 # Farmer viewset
 class FarmerViewSet(viewsets.ViewSet):
     permission_classes_by_action = {'create': [IsAuthenticated], 'list': [IsAuthenticated], 'update': [IsAuthenticated], 'destroy': [IsAdminUser], 'default': [IsAuthenticated]}
@@ -785,6 +792,8 @@ class MachineNameViewSet(generics.ListAPIView):
 
 # Milled viewset
 class MilledViewSet(viewsets.ViewSet):
+    pagination_class = FiftyPerPagePagination  # add this
+
     permission_classes_by_action = {
         'create': [IsAuthenticated],
         'list': [IsAuthenticated],
@@ -797,13 +806,41 @@ class MilledViewSet(viewsets.ViewSet):
         return [permission() for permission in
                 self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
 
-    # List all milled
+    # List with pagination
     def list(self, request):
-        milling = Milled.objects.all().order_by('-id')
-        serializer = MilledSerializer(milling, many=True, context={"request": request})
-        response_data = serializer.data
-        response_dict = {"error": False, "message": "All Milling List Data", "data": response_data}
-        return Response(response_dict)
+        paginator = self.pagination_class()
+
+        queryset = Milled.objects.all().order_by('-id')
+
+        # SEARCH (before pagination)
+        search = request.query_params.get('search', None)
+
+        if search:
+            queryset = queryset.filter(
+                Q(farmer__alias__icontains=search) |
+                Q(machine__name__icontains=search) |
+                Q(kgs__icontains=search) |
+                Q(amount__icontains=search)
+            )
+
+        # PAGINATE filtered queryset
+        page = paginator.paginate_queryset(queryset, request, view=self)
+
+        if page is not None:
+            serializer = MilledSerializer(page, many=True, context={"request": request})
+            return paginator.get_paginated_response({
+                "error": False,
+                "message": "Milling List",
+                "data": serializer.data
+            })
+
+        # fallback
+        serializer = MilledSerializer(queryset, many=True, context={"request": request})
+        return Response({
+            "error": False,
+            "message": "Milling List",
+            "data": serializer.data
+        })
 
     # Create a new milled instance
     def create(self, request):
@@ -890,13 +927,6 @@ class DashboardViewsSet(viewsets.ViewSet):
             "milling_revenue": milling_revenue
         }
         return Response(dict_response)
-
-
-# Pagination class
-class FiftyPerPagePagination(PageNumberPagination):
-    page_size = 50
-    page_size_query_param = 'page_size'
-    max_page_size = 100
 
 
 # Payment viewset
