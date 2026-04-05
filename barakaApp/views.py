@@ -892,44 +892,62 @@ class DashboardViewsSet(viewsets.ViewSet):
         return Response(dict_response)
 
 
+# Pagination class
+class FiftyPerPagePagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 # Payment viewset
 class PaymentViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    pagination_class = PageNumberPagination()
+    pagination_class = FiftyPerPagePagination  # FIXED
 
     def list(self, request):
-        paginator = self.pagination_class
+        paginator = self.pagination_class()
         search_query = request.query_params.get('search', None)
+        payment_mode = request.query_params.get('payment_mode', None)
+
         payments_query = Payments.objects.all().order_by('-id')
 
-        # Implementing the search functionality:
-        if search_query is not None:
+        # Filter by search (receipt, farmer, milling id, etc.)
+        if search_query:
             if search_query.isdigit():
-                # Search by orders_id if the search query is a number
                 payments_query = payments_query.filter(
-                    Q(orders_id__id=search_query)
+                    Q(orders_id__id=search_query) |
+                    Q(receipt_number__icontains=search_query)
                 )
             else:
-                # Search by other fields for non-numeric queries
                 payments_query = payments_query.filter(
-                    Q(paying_number__icontains=search_query)
+                    Q(receipt_number__icontains=search_query) |
+                    Q(farmer__name__icontains=search_query)
                 )
+
+        # Filter by payment mode if provided
+        if payment_mode:
+            try:
+                payment_mode_int = int(payment_mode)
+                payments_query = payments_query.filter(payment_mode=payment_mode_int)
+            except ValueError:
+                pass  # ignore invalid payment_mode values
 
         page = paginator.paginate_queryset(payments_query, request, view=self)
         if page is not None:
             serializer = PaymentsSerializer(page, many=True, context={"request": request})
-            response_data = paginator.get_paginated_response(serializer.data).data
-        else:
-            serializer = PaymentsSerializer(payments_query, many=True, context={"request": request})
-            response_data = serializer.data
+            return paginator.get_paginated_response({
+                "error": False,
+                "message": "All Payments List Data",
+                "data": serializer.data
+            })
 
-        response_dict = {
+        serializer = PaymentsSerializer(payments_query, many=True, context={"request": request})
+        return Response({
             "error": False,
             "message": "All Payments List Data",
-            "data": response_data
-        }
-        return Response(response_dict)
+            "data": serializer.data
+        })
 
     # Create a new payment instance
     def create(self, request):
