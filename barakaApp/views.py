@@ -1080,41 +1080,47 @@ class YearlyDataViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        year_dates = Milled.objects.order_by().values("mill_date__year").distinct()
+        year = request.query_params.get("year")  # e.g., 2024
+        month = request.query_params.get("month")  # optional: can be None
+
+        # Filter Milled
+        milled_qs = Milled.objects.all()
+        if year:
+            milled_qs = milled_qs.filter(mill_date__year=year)
+        if month:
+            milled_qs = milled_qs.filter(mill_date__month=month)
+
+        # Aggregate yearly kilos
+        year_dates = milled_qs.order_by().values("mill_date__year").distinct()
         year_kilos_chart_list = []
-        for year in year_dates:
-            access_year = year["mill_date__year"]
+        for y in year_dates:
+            access_year = y["mill_date__year"]
+            year_data = milled_qs.filter(mill_date__year=access_year)
+            year_kilos = sum(float(d.kgs) for d in year_data)
+            year_kilos_chart_list.append({"date": date(access_year, 1, 1), "kilos": year_kilos})
 
-            year_data = Milled.objects.filter(mill_date__year=access_year)
-            year_kilos = 0
-            access_year_date = date(year=access_year, month=1, day=1)
-            for year_single in year_data:
-                year_kilos += float(year_single.kgs)
+        # Filter Payments
+        payments_qs = Payments.objects.all()
+        if year:
+            payments_qs = payments_qs.filter(added_on__year=year)
+        if month:
+            payments_qs = payments_qs.filter(added_on__month=month)
 
-            year_kilos_chart_list.append({"date": access_year_date, "kilos": year_kilos})
-
-        # Yearly Payments
-        year_payment_dates = Payments.objects.order_by().values("added_on__year").distinct()
+        # Aggregate yearly payments
+        year_payment_dates = payments_qs.order_by().values("added_on__year").distinct()
         year_payments_chart_list = []
-        for payment in year_payment_dates:
-            access_year = payment["added_on__year"]
+        for y in year_payment_dates:
+            access_year = y["added_on__year"]
+            year_data = payments_qs.filter(added_on__year=access_year)
+            year_payment = sum(float(p.amount) for p in year_data)
+            year_payments_chart_list.append({"date": date(access_year, 1, 1), "amt": year_payment})
 
-            year_data = Payments.objects.filter(added_on__year=access_year)
-            year_payment = 0
-            access_date = date(year=access_year, month=1, day=1)
-            for payment_single in year_data:
-                year_payment += float(payment_single.amount)
-
-            year_payments_chart_list.append({"date": access_date, "amt": year_payment})
-
-        dict_response = {
+        return Response({
             "error": False,
             "message": "Yearly Data",
             "year_kilos": year_kilos_chart_list,
             "year_payments": year_payments_chart_list
-        }
-
-        return Response(dict_response)
+        })
 
 
 # Monthly kilos and payment chart
@@ -1123,43 +1129,47 @@ class MonthlyDataViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        month_dates = Milled.objects.order_by().values("mill_date__month", "mill_date__year").distinct()
+        year = request.query_params.get("year")
+        month = request.query_params.get("month")
+
+        # Filter Milled
+        milled_qs = Milled.objects.all()
+        if year:
+            milled_qs = milled_qs.filter(mill_date__year=year)
+        if month:
+            milled_qs = milled_qs.filter(mill_date__month=month)
+
+        month_dates = milled_qs.order_by().values("mill_date__month", "mill_date__year").distinct()
         month_kilos_chart_list = []
-        for month in month_dates:
-            access_month = month["mill_date__month"]
-            access_year = month["mill_date__year"]
+        for m in month_dates:
+            access_month = m["mill_date__month"]
+            access_year = m["mill_date__year"]
+            month_data = milled_qs.filter(mill_date__month=access_month, mill_date__year=access_year)
+            month_kilos = sum(float(d.kgs) for d in month_data)
+            month_kilos_chart_list.append({"date": date(access_year, access_month, 1), "kilos": month_kilos})
 
-            month_data = Milled.objects.filter(mill_date__month=access_month, mill_date__year=access_year)
-            month_kilos = 0
-            access_date = date(year=access_year, month=access_month, day=1)
-            for month_single in month_data:
-                month_kilos += float(month_single.kgs)
+        # Filter Payments
+        payments_qs = Payments.objects.all()
+        if year:
+            payments_qs = payments_qs.filter(added_on__year=year)
+        if month:
+            payments_qs = payments_qs.filter(added_on__month=month)
 
-            month_kilos_chart_list.append({"date": access_date, "kilos": month_kilos})
-
-        # Monthly Payments
-        month_payment_dates = Payments.objects.order_by().values("added_on__month", "added_on__year").distinct()
+        month_payment_dates = payments_qs.order_by().values("added_on__month", "added_on__year").distinct()
         month_payments_chart_list = []
-        for payment in month_payment_dates:
-            access_month = payment["added_on__month"]
-            access_year = payment["added_on__year"]
+        for m in month_payment_dates:
+            access_month = m["added_on__month"]
+            access_year = m["added_on__year"]
+            month_data = payments_qs.filter(added_on__month=access_month, added_on__year=access_year)
+            month_payment = sum(float(p.amount) for p in month_data)
+            month_payments_chart_list.append({"date": date(access_year, access_month, 1), "amt": month_payment})
 
-            month_data = Payments.objects.filter(added_on__month=access_month, added_on__year=access_year)
-            month_payment = 0
-            access_date = date(year=access_year, month=access_month, day=1)
-            for payment_single in month_data:
-                month_payment += float(payment_single.amount)
-
-            month_payments_chart_list.append({"date": access_date, "amt": month_payment})
-
-        dict_response = {
+        return Response({
             "error": False,
             "message": "Monthly Data",
             "month_kilos_chart": month_kilos_chart_list,
-            "month_payments_chart": month_payments_chart_list,
-        }
-
-        return Response(dict_response)
+            "month_payments_chart": month_payments_chart_list
+        })
 
 
 # monthly kilos per machine
