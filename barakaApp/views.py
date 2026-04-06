@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets, status, generics, permissions
 
-from django.db.models import Q, Sum, F, DecimalField, Subquery, OuterRef, ExpressionWrapper, Value
+from django.db.models import Q, Sum, F, DecimalField, Subquery, OuterRef, ExpressionWrapper, Value, FloatField
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
@@ -891,43 +891,66 @@ class DashboardViewsSet(viewsets.ViewSet):
         return [permission() for permission in
                 self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
 
-    # List total farmers in the system
     def list(self, request):
-        # Get total farmers
-        farmer = Farmer.objects.all()
-        farmer_serializer = FarmerSerializer(farmer, many=True, context={"request": request})
+        year = request.query_params.get('year')
+        month = request.query_params.get('month')
 
-        # Get total milled kilos and amount
+        # ----- Farmers -----
+        farmers = Farmer.objects.all()
+        if year and month:
+            farmers = farmers.filter(added_on__year=year, added_on__month=month)
+        elif year:
+            farmers = farmers.filter(added_on__year=year)
+
+        # ----- Milled -----
         milled = Milled.objects.all()
-        kgs = 0
-        amount = 0
-        milling_revenue = 0
-        for total in milled:
-            kgs += float(total.kgs)
-            amount += float(total.amount)
-            milling_revenue += float(total.price) * float(total.kgs)
+        if year and month:
+            milled = milled.filter(mill_date__year=year, mill_date__month=month)
+        elif year:
+            milled = milled.filter(mill_date__year=year)
 
-        # Get total payments
-        payed = Payments.objects.all()
-        payment = 0
-        for full_payment in payed:
-            payment += float(full_payment.payment)
+        # Aggregate totals with ExpressionWrapper
+        total_kgs = milled.aggregate(
+            total_kgs=Sum(ExpressionWrapper(F('kgs'), output_field=FloatField()))
+        )['total_kgs'] or 0
 
-        # Get total balance
-        balance = amount - payment
+        total_amount = milled.aggregate(
+            total_amount=Sum(ExpressionWrapper(F('amount'), output_field=FloatField()))
+        )['total_amount'] or 0
 
-        dict_response = {
+        milling_revenue = milled.aggregate(
+            revenue=Sum(
+                ExpressionWrapper(
+                    F('kgs') * F('price'),
+                    output_field=FloatField()
+                )
+            )
+        )['revenue'] or 0
+
+        # ----- Payments -----
+        payments = Payments.objects.all()
+        if year and month:
+            payments = payments.filter(added_on__year=year, added_on__month=month)
+        elif year:
+            payments = payments.filter(added_on__year=year)
+
+        total_payment = payments.aggregate(
+            total_payment=Sum(ExpressionWrapper(F('payment'), output_field=FloatField()))
+        )['total_payment'] or 0
+
+        total_balance = total_amount - total_payment
+
+        return Response({
             "error": False,
             "message": "Home page data",
-            "farmer": len(farmer_serializer.data),
-            "total_milled": kgs,
-            "total_amount": amount,
-            "total_payment": payment,
-            "total_balance": balance,
+            "farmer_count": farmers.count(),
+            "total_milled": total_kgs,
+            "total_amount": total_amount,
+            "total_payment": total_payment,
+            "total_balance": total_balance,
             "milling_revenue": milling_revenue
-        }
-        return Response(dict_response)
-
+        })
+    
 
 # Payment viewset
 class PaymentViewSet(viewsets.ViewSet):
