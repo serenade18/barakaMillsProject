@@ -969,13 +969,13 @@ class PaymentViewSet(viewsets.ViewSet):
         if search_query:
             if search_query.isdigit():
                 payments_query = payments_query.filter(
-                    Q(orders_id__id=search_query) |
+                    Q(milling_id=search_query) |
                     Q(receipt_number__icontains=search_query)
                 )
             else:
                 payments_query = payments_query.filter(
                     Q(receipt_number__icontains=search_query) |
-                    Q(farmer__name__icontains=search_query)
+                    Q(farmer_id__alias__icontains=search_query)
                 )
 
         # Filter by payment mode if provided
