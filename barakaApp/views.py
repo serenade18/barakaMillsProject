@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets, status, generics, permissions
 
+from django.db import IntegrityError
+
 from django.db.models import Q, Sum, F, DecimalField, Subquery, OuterRef, ExpressionWrapper, Value, FloatField
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -501,19 +503,45 @@ class FarmerViewSet(viewsets.ViewSet):
 
     def create(self, request):
         try:
-            # Ensure referral is optional
             data = request.data.copy()
-            if "refferal" not in data or not data["refferal"]:
-                data["refferal"] = None  # Handle missing or empty referral field
 
-            serializer = FarmerSerializer(data=data, context={"request": request})
+            if not data.get("refferal"):
+                data["refferal"] = None
+
+            serializer = FarmerSerializer(
+                data=data,
+                context={"request": request}
+            )
+
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            dict_response = {"error": False, "message": "Farmers Data Saved Successfully"}
-        except Exception as e:
-            dict_response = {"error": True, "message": f"Error During Saving Farmers Data: {str(e)}"}
 
-        return Response(dict_response)
+            return Response(
+                {
+                    "error": False,
+                    "message": "Farmers Data Saved Successfully",
+                    "data": serializer.data
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        except IntegrityError as e:
+            return Response(
+                {
+                    "error": True,
+                    "message": f"Duplicate / invalid database constraint: {str(e)}"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Exception as e:
+            return Response(
+                {
+                    "error": True,
+                    "message": f"Error During Saving Farmers Data: {str(e)}"
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def retrieve(self, request, pk=None):
         queryset = Farmer.objects.all()
@@ -817,8 +845,8 @@ class MilledViewSet(viewsets.ViewSet):
 
         if search:
             queryset = queryset.filter(
-                Q(farmer__alias__icontains=search) |
-                Q(machine__name__icontains=search) |
+                Q(farmer_id__alias__icontains=search) |
+                Q(machine_id__name__icontains=search) |
                 Q(kgs__icontains=search) |
                 Q(amount__icontains=search)
             )
@@ -1080,48 +1108,89 @@ class YearlyDataViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        year = request.query_params.get("year")  # e.g., 2024
-        month = request.query_params.get("month")  # optional: can be None
+        year = request.query_params.get("year")
+        month = request.query_params.get("month")
 
-        # Filter Milled
+        # ======================
+        # MILLED QUERYSET
+        # ======================
         milled_qs = Milled.objects.all()
+
         if year:
             milled_qs = milled_qs.filter(mill_date__year=year)
+
         if month:
             milled_qs = milled_qs.filter(mill_date__month=month)
 
-        # Aggregate yearly kilos
-        year_dates = milled_qs.order_by().values("mill_date__year").distinct()
+        year_dates = (
+            milled_qs.order_by()
+            .values("mill_date__year")
+            .distinct()
+        )
+
         year_kilos_chart_list = []
+        year_revenue_chart_list = []
+
         for y in year_dates:
             access_year = y["mill_date__year"]
-            year_data = milled_qs.filter(mill_date__year=access_year)
-            year_kilos = sum(float(d.kgs) for d in year_data)
-            year_kilos_chart_list.append({"date": date(access_year, 1, 1), "kilos": year_kilos})
 
-        # Filter Payments
+            year_data = milled_qs.filter(mill_date__year=access_year)
+
+            year_kilos = sum(float(item.kgs) for item in year_data)
+            year_revenue = sum(float(item.amount) for item in year_data)
+
+            access_date = date(access_year, 1, 1)
+
+            year_kilos_chart_list.append({
+                "date": access_date,
+                "kilos": year_kilos
+            })
+
+            year_revenue_chart_list.append({
+                "date": access_date,
+                "amt": year_revenue
+            })
+
+        # ======================
+        # PAYMENTS QUERYSET
+        # ======================
         payments_qs = Payments.objects.all()
+
         if year:
             payments_qs = payments_qs.filter(added_on__year=year)
+
         if month:
             payments_qs = payments_qs.filter(added_on__month=month)
 
-        # Aggregate yearly payments
-        year_payment_dates = payments_qs.order_by().values("added_on__year").distinct()
+        year_payment_dates = (
+            payments_qs.order_by()
+            .values("added_on__year")
+            .distinct()
+        )
+
         year_payments_chart_list = []
+
         for y in year_payment_dates:
             access_year = y["added_on__year"]
+
             year_data = payments_qs.filter(added_on__year=access_year)
-            year_payment = sum(float(p.amount) for p in year_data)
-            year_payments_chart_list.append({"date": date(access_year, 1, 1), "amt": year_payment})
+
+            year_payment = sum(float(item.amount) for item in year_data)
+
+            access_date = date(access_year, 1, 1)
+
+            year_payments_chart_list.append({
+                "date": access_date,
+                "amt": year_payment
+            })
 
         return Response({
             "error": False,
             "message": "Yearly Data",
             "year_kilos": year_kilos_chart_list,
-            "year_payments": year_payments_chart_list
+            "year_payments": year_payments_chart_list,
+            "year_revenue": year_revenue_chart_list,  # milling revenue
         })
-
 
 # Monthly kilos and payment chart
 class MonthlyDataViewSet(viewsets.ViewSet):
