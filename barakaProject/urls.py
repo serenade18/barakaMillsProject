@@ -10,7 +10,7 @@ from barakaApp.views import AdminUserViewSet, SalesUserViewSet, HybridUserViewSe
     MachineViewSet, MilledViewSet, FarmerOnlyViewSet, FarmerNameViewSet, MachineOnlyViewSet, MachineNameViewSet, \
     DashboardViewsSet, PaymentViewSet, YearlyDataViewSet, MonthlyDataViewSet, TotalPositiveBalanceView, \
     TotalNegativeBalanceView, FarmersWithNegativeBalanceViewSet, FarmersWithPositiveBalanceViewSet, \
-    MonthlyMillsPerMachineViewSet, YearlyMillsPerMachineViewSet
+    MonthlyMillsPerMachineViewSet, YearlyMillsPerMachineViewSet, ChangePasswordView
 
 router = routers.DefaultRouter()
 router.register(r'admin/users', AdminUserViewSet, basename='admin-user')
@@ -37,6 +37,8 @@ urlpatterns = [
     path('api/hybrid/verify/', HybridUserViewSet.as_view({'post': 'verify_otp'}), name='hybrid-verify'),
     path('api/sales/verify/', SalesUserViewSet.as_view({'post': 'verify_otp'}), name='sales-verify'),
     path('api/userinfo/', UserInfoView.as_view(), name='userinfo'),
+    path('api/user/me/', UserInfoView.as_view(), name='user-info'),
+    path('api/user/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/farmeronly/', FarmerOnlyViewSet.as_view(), name="farmeronly"),
     path('api/farmername/', FarmerNameViewSet.as_view(), name="farmername"),
     path('api/machineonly/', MachineOnlyViewSet.as_view(), name="machineonly"),

@@ -4,7 +4,7 @@ from datetime import timedelta, date
 
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.db.models.functions import Coalesce, TruncDate, Cast, ExtractYear, ExtractMonth
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -37,6 +37,75 @@ class UserInfoView(APIView):
         user = request.user
         serializer = UserAccountSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        # Only allow safe fields — never let the user elevate their own role
+        ALLOWED_FIELDS = {'name', 'phone', 'email'}
+        data = {k: v for k, v in request.data.items() if k in ALLOWED_FIELDS}
+
+        if not data:
+            return Response(
+                {'error': 'No valid fields provided. Allowed fields: name, phone, email'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = UserAccountSerializer(request.user, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Change password
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        current_password = request.data.get('current_password', '').strip()
+        new_password = request.data.get('new_password', '').strip()
+        confirm_password = request.data.get('confirm_password', '').strip()
+
+        # ── Validation ──────────────────────────────────────────────────────
+        if not all([current_password, new_password, confirm_password]):
+            return Response(
+                {'error': 'current_password, new_password and confirm_password are all required.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not check_password(current_password, user.password):
+            return Response(
+                {'error': 'Current password is incorrect.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if new_password != confirm_password:
+            return Response(
+                {'error': 'new_password and confirm_password do not match.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if len(new_password) < 8:
+            return Response(
+                {'error': 'New password must be at least 8 characters long.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if current_password == new_password:
+            return Response(
+                {'error': 'New password must be different from the current password.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # ── Save ─────────────────────────────────────────────────────────────
+        user.password = make_password(new_password)
+        user.save(update_fields=['password'])
+
+        return Response(
+            {'message': 'Password changed successfully.'},
+            status=status.HTTP_200_OK,
+        )
 
 
 # Admin viewset
@@ -497,6 +566,7 @@ class FarmerViewSet(viewsets.ViewSet):
         response_dict = {
             "error": False,
             "message": "All Farmers List Data",
+            "count": farmers.count(),
             "data": serializer.data
         }
         return Response(response_dict)
@@ -1191,6 +1261,7 @@ class YearlyDataViewSet(viewsets.ViewSet):
             "year_payments": year_payments_chart_list,
             "year_revenue": year_revenue_chart_list,  # milling revenue
         })
+
 
 # Monthly kilos and payment chart
 class MonthlyDataViewSet(viewsets.ViewSet):
