@@ -1400,6 +1400,46 @@ class YearlyMillsPerMachineViewSet(viewsets.ViewSet):
         })
 
 
+# daily kilos per machine (today)
+class DailyMillsPerMachineViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        from datetime import date as _date
+        target_str = request.query_params.get("date")
+        try:
+            target = _date.fromisoformat(target_str) if target_str else timezone.now().date()
+        except ValueError:
+            target = timezone.now().date()
+
+        milled_data = Milled.objects.filter(mill_date=target).select_related("machine_id")
+        grouped_kgs = defaultdict(float)
+        grouped_amount = defaultdict(float)
+        machine_ids = {}
+
+        for record in milled_data:
+            try:
+                machine_name = record.machine_id.name
+                machine_ids[machine_name] = record.machine_id.id
+                grouped_kgs[machine_name] += float(record.kgs)
+                grouped_amount[machine_name] += float(record.amount)
+            except (ValueError, AttributeError):
+                continue
+
+        daily_mills = [
+            {"machine_id": machine_ids[name], "machine": name, "kilos": kgs, "amount": grouped_amount.get(name, 0)}
+            for name, kgs in grouped_kgs.items()
+        ]
+
+        return Response({
+            "error": False,
+            "message": "Daily Mills Per Machine",
+            "date": target.isoformat(),
+            "daily_mills": daily_mills,
+        })
+
+
 # Positive Balance
 class TotalPositiveBalanceView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -1549,4 +1589,127 @@ class FarmersWithNegativeBalanceViewSet(viewsets.ViewSet):
         response_dict = {"error": False, "message": "Overpayment List Data", "data": data_with_balance}
 
         return Response(response_dict)
+
+
+# ============================================================
+# Staff management — admin can list/create/update/delete staff
+# and change their roles (user_type).
+# ============================================================
+VALID_ROLES = ['admin', 'sales', 'accounts', 'hybrid']
+
+
+class StaffViewSet(viewsets.ViewSet):
+    """Full CRUD for staff. Admin-only writes; authenticated reads."""
+    permission_classes_by_action = {
+        'list': [IsAuthenticated],
+        'retrieve': [IsAuthenticated],
+        'create': [IsAdminUser],
+        'update': [IsAdminUser],
+        'partial_update': [IsAdminUser],
+        'destroy': [IsAdminUser],
+        'default': [IsAuthenticated],
+    }
+
+    def get_permissions(self):
+        return [p() for p in self.permission_classes_by_action.get(
+            self.action, self.permission_classes_by_action['default'])]
+
+    def list(self, request):
+        search = (request.query_params.get('search') or '').strip()
+        qs = UserAccount.objects.all().order_by('-added_on')
+        if search:
+            qs = qs.filter(
+                Q(name__icontains=search) |
+                Q(email__icontains=search) |
+                Q(phone__icontains=search) |
+                Q(user_type__icontains=search)
+            )
+        data = UserAccountSerializer(qs, many=True).data
+        return Response({"error": False, "message": "Staff list", "data": data})
+
+    def retrieve(self, request, pk=None):
+        user = get_object_or_404(UserAccount, pk=pk)
+        return Response(UserAccountSerializer(user).data)
+
+    def create(self, request):
+        data = request.data
+        name = (data.get('name') or '').strip()
+        email = (data.get('email') or '').strip().lower()
+        phone = (data.get('phone') or '').strip()
+        user_type = (data.get('user_type') or 'sales').strip().lower()
+        password = data.get('password') or 'changeme123'
+
+        if not name:
+            return Response({'error': 'Name is required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        if user_type not in VALID_ROLES:
+            return Response({'error': f'Invalid role. Must be one of {VALID_ROLES}'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if UserAccount.objects.filter(email__iexact=email).exists():
+            return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = UserAccount(
+            name=name, email=email, phone=phone,
+            user_type=user_type, is_active=True,
+            is_staff=user_type == 'admin',
+            is_superuser=user_type == 'admin',
+        )
+        user.password = make_password(password)
+        user.save()
+        return Response(UserAccountSerializer(user).data, status=status.HTTP_201_CREATED)
+
+    def _apply_update(self, user, data, partial=False):
+        if 'name' in data and data['name']:
+            user.name = data['name'].strip()
+        if 'email' in data and data['email']:
+            new_email = data['email'].strip().lower()
+            if UserAccount.objects.filter(email__iexact=new_email).exclude(pk=user.pk).exists():
+                raise ValidationError('Email already exists')
+            user.email = new_email
+        if 'phone' in data:
+            user.phone = (data.get('phone') or '').strip()
+        if 'user_type' in data and data['user_type']:
+            ut = data['user_type'].strip().lower()
+            if ut not in VALID_ROLES:
+                raise ValidationError(f'Invalid role. Must be one of {VALID_ROLES}')
+            user.user_type = ut
+            user.is_staff = ut == 'admin'
+            user.is_superuser = ut == 'admin'
+        if 'is_active' in data:
+            user.is_active = bool(data['is_active'])
+        if data.get('password'):
+            user.password = make_password(data['password'])
+        user.save()
+        return user
+
+    def update(self, request, pk=None):
+        user = get_object_or_404(UserAccount, pk=pk)
+        try:
+            user = self._apply_update(user, request.data, partial=False)
+        except ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(UserAccountSerializer(user).data)
+
+    def partial_update(self, request, pk=None):
+        user = get_object_or_404(UserAccount, pk=pk)
+        try:
+            user = self._apply_update(user, request.data, partial=True)
+        except ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(UserAccountSerializer(user).data)
+
+    def destroy(self, request, pk=None):
+        user = get_object_or_404(UserAccount, pk=pk)
+        if request.user and request.user.pk == user.pk:
+            return Response({'error': "You can't delete your own account"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=False, methods=['get'], url_path='roles')
+    def roles(self, request):
+        return Response({"data": [
+            {"value": r, "label": r.capitalize()} for r in VALID_ROLES
+        ]})
 
