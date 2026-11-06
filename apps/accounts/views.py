@@ -564,12 +564,14 @@ class StaffViewSet(viewsets.ViewSet):
         email = (data.get('email') or '').strip().lower()
         phone = (data.get('phone') or '').strip()
         user_type = (data.get('user_type') or 'sales').strip().lower()
-        password = data.get('password') or 'changeme123'
+        password = data.get('password')
 
         if not name:
             return Response({'error': 'Name is required'}, status=status.HTTP_400_BAD_REQUEST)
         if not email:
             return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not password:
+            return Response({'error': 'Password is required'}, status=status.HTTP_400_BAD_REQUEST)
         if user_type not in VALID_ROLES:
             return Response({'error': f'Invalid role. Must be one of {VALID_ROLES}'},
                             status=status.HTTP_400_BAD_REQUEST)
