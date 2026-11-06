@@ -179,6 +179,9 @@ USE_TZ = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+# nginx terminates HTTPS and always sets this header.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
