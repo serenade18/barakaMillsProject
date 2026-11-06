@@ -177,7 +177,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+from corsheaders.defaults import default_headers
+
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = (*default_headers, 'x-idempotency-key')
 
 # nginx terminates HTTPS and always sets this header.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
