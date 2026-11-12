@@ -239,7 +239,7 @@ class HybridUserViewSet(viewsets.ViewSet):
         try:
             user = UserAccount.objects.get(email=email)
             user.is_active = True
-            user.is_staff = True
+            user.is_staff = False
             user.is_superuser = False
             user.user_type = 'hybrid'
             user.save()
