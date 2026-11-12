@@ -79,6 +79,14 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+    def save(self, *args, **kwargs):
+        # Only admins may sign in to Django admin or hold superuser rights;
+        # every other role (hybrid included) is always plain staff.
+        if self.user_type != self.UserTypes.ADMIN:
+            self.is_staff = False
+            self.is_superuser = False
+        super().save(*args, **kwargs)
+
     def clean(self):
         if self.user_type not in [choice[0] for choice in self.UserTypes.choices]:
             raise ValidationError('Invalid user type')
