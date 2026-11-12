@@ -2,6 +2,7 @@ import random
 
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password, check_password
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
@@ -12,8 +13,8 @@ from apps.core.permissions import IsAdminRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.accounts.models import UserAccount, OTP
-from apps.accounts.serializers import UserAccountSerializer, UserCreateSerializer
+from apps.accounts.models import UserAccount, OTP, Role
+from apps.accounts.serializers import UserAccountSerializer, UserCreateSerializer, RoleSerializer
 
 
 class UserInfoView(APIView):
@@ -644,3 +645,58 @@ class StaffViewSet(viewsets.ViewSet):
         return Response({"data": [
             {"value": r, "label": r.capitalize()} for r in VALID_ROLES
         ]})
+
+
+# ============================================================
+# Roles — admin manages the roles that can be assigned to staff.
+# Built-in roles can have their description edited but cannot be
+# renamed or deleted; custom roles can't be deleted while in use.
+# ============================================================
+class RoleViewSet(viewsets.ViewSet):
+    permission_classes = [IsAdminRole]
+
+    def list(self, request):
+        search = (request.query_params.get('search') or '').strip()
+        qs = Role.objects.all()
+        if search:
+            qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search))
+        return Response({"error": False, "message": "Roles", "data": RoleSerializer(qs, many=True).data})
+
+    def retrieve(self, request, pk=None):
+        return Response(RoleSerializer(get_object_or_404(Role, pk=pk)).data)
+
+    def create(self, request):
+        serializer = RoleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        role = serializer.save(is_system=False)
+        return Response(RoleSerializer(role).data, status=status.HTTP_201_CREATED)
+
+    def _save(self, request, pk, partial):
+        role = get_object_or_404(Role, pk=pk)
+        old_name = role.name
+        serializer = RoleSerializer(role, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        with transaction.atomic():
+            role = serializer.save()
+            if role.name != old_name:
+                # Keep staff on the renamed role.
+                UserAccount.objects.filter(user_type=old_name).update(user_type=role.name)
+        return Response(RoleSerializer(role).data)
+
+    def update(self, request, pk=None):
+        return self._save(request, pk, partial=False)
+
+    def partial_update(self, request, pk=None):
+        return self._save(request, pk, partial=True)
+
+    def destroy(self, request, pk=None):
+        role = get_object_or_404(Role, pk=pk)
+        if role.is_system:
+            return Response({'error': 'Built-in roles cannot be deleted.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        in_use = UserAccount.objects.filter(user_type=role.name).count()
+        if in_use:
+            return Response({'error': f'{in_use} staff member(s) still have this role. Reassign them first.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        role.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

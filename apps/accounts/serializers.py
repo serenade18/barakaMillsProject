@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
+from apps.accounts.models import Role
+
 User = get_user_model()
 
 
@@ -37,3 +39,32 @@ class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'name', 'phone', 'user_type',  'added_on']
+
+
+# Role serializer
+class RoleSerializer(serializers.ModelSerializer):
+    user_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Role
+        fields = ['id', 'name', 'description', 'is_system', 'user_count', 'added_on']
+        read_only_fields = ['is_system', 'user_count', 'added_on']
+
+    def get_user_count(self, obj):
+        return User.objects.filter(user_type=obj.name).count()
+
+    def validate_name(self, value):
+        # Stored lowercase, like user_type; spaces become underscores.
+        name = '_'.join(value.strip().lower().split())
+        if not name:
+            raise serializers.ValidationError('Name is required.')
+        if len(name) > 20:
+            raise serializers.ValidationError('Name must be 20 characters or fewer.')
+        qs = Role.objects.filter(name=name)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError('A role with this name already exists.')
+        if self.instance and self.instance.is_system and name != self.instance.name:
+            raise serializers.ValidationError('Built-in roles cannot be renamed.')
+        return name

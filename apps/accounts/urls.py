@@ -3,13 +3,14 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.accounts.views import AdminUserViewSet, HybridUserViewSet, SalesUserViewSet, StaffViewSet, UserInfoView, \
-    ChangePasswordView
+    ChangePasswordView, RoleViewSet
 
 router = routers.SimpleRouter()
 router.register(r'admin/users', AdminUserViewSet, basename='admin-user')
 router.register(r'hybrid/users', HybridUserViewSet, basename='bar-user')
 router.register(r'sales/users', SalesUserViewSet, basename='liquor-store-user')
 router.register(r'staff', StaffViewSet, basename='staff')
+router.register(r'roles', RoleViewSet, basename='roles')
 
 # Mounted under /api/
 urlpatterns = [
