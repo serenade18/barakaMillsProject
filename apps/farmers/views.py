@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import IntegrityError
 from django.db.models import Q, Sum, F, DecimalField, Subquery, OuterRef, ExpressionWrapper, Value
 from django.db.models.functions import Coalesce, ExtractYear, ExtractMonth
@@ -360,14 +362,39 @@ class FarmersWithPositiveBalanceViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
+        # Optional period filter (YYYY-MM-DD). When given, only debt from
+        # millings whose mill_date falls in the period counts: the amount
+        # milled in the period minus the payments made against those millings.
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        try:
+            if start_date:
+                start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            if end_date:
+                end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        except ValueError:
+            return Response(
+                {"error": True, "message": "Dates must be in YYYY-MM-DD format.", "data": []},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        milled_filter = Q(farmer_id=OuterRef('id'))
+        payments_filter = Q(farmer_id=OuterRef('id'))
+        if start_date:
+            milled_filter &= Q(mill_date__gte=start_date)
+            payments_filter &= Q(milling_id__mill_date__gte=start_date)
+        if end_date:
+            milled_filter &= Q(mill_date__lte=end_date)
+            payments_filter &= Q(milling_id__mill_date__lte=end_date)
+
         total_milled_subquery = Milled.objects.filter(
-            farmer_id=OuterRef('id')
+            milled_filter
         ).values('farmer_id').annotate(
             total=Sum('amount')
         ).values('total')[:1]
 
         total_payments_subquery = Payments.objects.filter(
-            farmer_id=OuterRef('id')
+            payments_filter
         ).values('farmer_id').annotate(
             total=Sum('payment')
         ).values('total')[:1]
