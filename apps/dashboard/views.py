@@ -4,7 +4,6 @@ from datetime import date
 from django.db.models import Sum, F, ExpressionWrapper, FloatField
 from django.utils import timezone
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from apps.core.permissions import IsAdminRole
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -18,7 +17,7 @@ from apps.payments.models import Payments
 class DashboardViewsSet(viewsets.ViewSet):
     permission_classes_by_action = {
         'list': [IsAdminRole],
-        'default': [IsAuthenticated]
+        'default': [IsAdminRole]
     }
 
     def get_permissions(self):
@@ -89,7 +88,7 @@ class DashboardViewsSet(viewsets.ViewSet):
 # Yearly kilos payment chart
 class YearlyDataViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminRole]
 
     def list(self, request):
         year = request.query_params.get("year")
@@ -180,7 +179,7 @@ class YearlyDataViewSet(viewsets.ViewSet):
 # Monthly kilos and payment chart
 class MonthlyDataViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminRole]
 
     def list(self, request):
         year = request.query_params.get("year")
@@ -229,7 +228,7 @@ class MonthlyDataViewSet(viewsets.ViewSet):
 # monthly kilos per machine
 class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminRole]
 
     def list(self, request):
         milled_data = Milled.objects.all()
@@ -273,7 +272,7 @@ class MonthlyMillsPerMachineViewSet(viewsets.ViewSet):
 # monthly kilos per machine
 class YearlyMillsPerMachineViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminRole]
 
     def list(self, request):
         milled_data = Milled.objects.all()
@@ -317,7 +316,7 @@ class YearlyMillsPerMachineViewSet(viewsets.ViewSet):
 # daily kilos per machine (today)
 class DailyMillsPerMachineViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminRole]
 
     def list(self, request):
         from datetime import date as _date
