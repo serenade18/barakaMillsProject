@@ -23,11 +23,7 @@ from apps.payments.serializers import PaymentsSerializer
 
 # Farmer viewset
 class FarmerViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [IsAuthenticated], 'list': [IsAuthenticated], 'update': [IsAuthenticated], 'destroy': [IsAdminRole],
-                                     # Balance totals/lists are admin-only
-                                     'farmers_with_balance': [IsAdminRole], 'farmers_with_excess': [IsAdminRole],
-                                     'total_balance': [IsAdminRole],
-                                     'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [IsAuthenticated], 'list': [IsAuthenticated], 'update': [IsAuthenticated], 'destroy': [IsAdminRole], 'default': [IsAuthenticated]}
 
     def get_permissions(self):
         return [permission() for permission in
@@ -299,7 +295,7 @@ class FarmerNameViewSet(generics.ListAPIView):
 # Positive Balance
 class TotalPositiveBalanceView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminRole]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # Calculate the total positive balance
@@ -336,7 +332,7 @@ class TotalPositiveBalanceView(APIView):
 # Negative Balance
 class TotalNegativeBalanceView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminRole]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # Calculate the total positive balance
@@ -364,7 +360,7 @@ class TotalNegativeBalanceView(APIView):
 # Farmers with Positive Balance
 class FarmersWithPositiveBalanceViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminRole]
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         # Optional period filter (YYYY-MM-DD). When given, only debt from
@@ -438,7 +434,7 @@ class FarmersWithPositiveBalanceViewSet(viewsets.ViewSet):
 # Farmers with Negative Balance
 class FarmersWithNegativeBalanceViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdminRole]
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         # Calculate the balance for each farmer
