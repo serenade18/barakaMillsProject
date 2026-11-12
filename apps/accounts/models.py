@@ -59,9 +59,10 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
+    # Holds a Role.name. No `choices`: admins can add custom roles, so the
+    # Role table (not UserTypes) is the list of valid values.
     user_type = models.CharField(
         max_length=20,
-        choices=UserTypes.choices,
         default=UserTypes.SALES
     )
     is_active = models.BooleanField(default=True)
@@ -88,8 +89,28 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         super().save(*args, **kwargs)
 
     def clean(self):
-        if self.user_type not in [choice[0] for choice in self.UserTypes.choices]:
+        if not Role.objects.filter(name=self.user_type).exists():
             raise ValidationError('Invalid user type')
+
+
+# Staff roles. A user's role is UserAccount.user_type == Role.name.
+# The built-in roles (admin, sales, accounts, hybrid) are system roles: the
+# code relies on their names (admin has full access), so they cannot be
+# renamed or deleted. Custom roles get the same access as non-admin staff.
+class Role(models.Model):
+    SYSTEM_ROLES = ['admin', 'sales', 'accounts', 'hybrid']
+
+    name = models.CharField(max_length=20, unique=True)
+    description = models.TextField(blank=True, default='')
+    is_system = models.BooleanField(default=False)
+    added_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = APP_LABEL
+        ordering = ['id']
+
+    def __str__(self):
+        return self.name
 
 
 # OTP model
