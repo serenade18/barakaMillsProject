@@ -4,7 +4,8 @@ from datetime import date
 from django.db.models import Sum, F, ExpressionWrapper, FloatField
 from django.utils import timezone
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
+from apps.core.permissions import IsAdminRole
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -16,7 +17,7 @@ from apps.payments.models import Payments
 # Dashboard viewset
 class DashboardViewsSet(viewsets.ViewSet):
     permission_classes_by_action = {
-        'list': [IsAdminUser],
+        'list': [IsAdminRole],
         'default': [IsAuthenticated]
     }
 

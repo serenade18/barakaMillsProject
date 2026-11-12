@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status, generics
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
+from apps.core.permissions import IsAdminRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -22,7 +23,7 @@ from apps.payments.serializers import PaymentsSerializer
 
 # Farmer viewset
 class FarmerViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [IsAuthenticated], 'list': [IsAuthenticated], 'update': [IsAuthenticated], 'destroy': [IsAdminUser], 'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [IsAuthenticated], 'list': [IsAuthenticated], 'update': [IsAuthenticated], 'destroy': [IsAdminRole], 'default': [IsAuthenticated]}
 
     def get_permissions(self):
         return [permission() for permission in

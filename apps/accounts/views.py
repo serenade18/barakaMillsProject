@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from apps.core.permissions import IsAdminRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -158,7 +159,7 @@ class AdminUserViewSet(viewsets.ViewSet):
 
 # Hybrid viewset
 class HybridUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminUser], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -280,7 +281,7 @@ class HybridUserViewSet(viewsets.ViewSet):
 
 # Sales viewset
 class SalesUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminUser], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -400,7 +401,7 @@ class SalesUserViewSet(viewsets.ViewSet):
 
 # Accounts viewset
 class AccountsUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminUser], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -530,10 +531,10 @@ class StaffViewSet(viewsets.ViewSet):
     permission_classes_by_action = {
         'list': [IsAuthenticated],
         'retrieve': [IsAuthenticated],
-        'create': [IsAdminUser],
-        'update': [IsAdminUser],
-        'partial_update': [IsAdminUser],
-        'destroy': [IsAdminUser],
+        'create': [IsAdminRole],
+        'update': [IsAdminRole],
+        'partial_update': [IsAdminRole],
+        'destroy': [IsAdminRole],
         'default': [IsAuthenticated],
     }
 

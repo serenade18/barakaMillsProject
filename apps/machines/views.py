@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status, generics
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
+from apps.core.permissions import IsAdminRole
 from rest_framework.response import Response
 
 from apps.machines.models import Machine
@@ -10,10 +11,10 @@ from apps.machines.serializers import MachineSerializer
 # Machine viewset
 class MachineViewSet(viewsets.ViewSet):
     permission_classes_by_action = {
-        'create': [IsAdminUser],
+        'create': [IsAdminRole],
         'list': [IsAuthenticated],
-        'update': [IsAdminUser],
-        'destroy': [IsAdminUser],
+        'update': [IsAdminRole],
+        'destroy': [IsAdminRole],
         'default': [IsAuthenticated]
     }
 

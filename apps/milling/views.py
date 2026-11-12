@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
+from apps.core.permissions import IsAdminRole
 from rest_framework.response import Response
 
 from apps.core.pagination import FiftyPerPagePagination
@@ -16,8 +17,8 @@ class MilledViewSet(viewsets.ViewSet):
     permission_classes_by_action = {
         'create': [IsAuthenticated],
         'list': [IsAuthenticated],
-        'update': [IsAdminUser],
-        'destroy': [IsAdminUser],
+        'update': [IsAdminRole],
+        'destroy': [IsAdminRole],
         'default': [IsAuthenticated]
     }
 
