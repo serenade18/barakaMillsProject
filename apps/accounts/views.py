@@ -526,7 +526,9 @@ class AccountsUserViewSet(viewsets.ViewSet):
 # Staff management — admin can list/create/update/delete staff
 # and change their roles (user_type).
 # ============================================================
-VALID_ROLES = ['admin', 'sales', 'accounts', 'hybrid']
+def valid_role_names():
+    # Roles come from the Role table so admins can add custom ones.
+    return list(Role.objects.values_list('name', flat=True))
 
 
 class StaffViewSet(viewsets.ViewSet):
@@ -576,8 +578,8 @@ class StaffViewSet(viewsets.ViewSet):
             return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
         if not password:
             return Response({'error': 'Password is required'}, status=status.HTTP_400_BAD_REQUEST)
-        if user_type not in VALID_ROLES:
-            return Response({'error': f'Invalid role. Must be one of {VALID_ROLES}'},
+        if not Role.objects.filter(name=user_type).exists():
+            return Response({'error': f'Invalid role. Must be one of {valid_role_names()}'},
                             status=status.HTTP_400_BAD_REQUEST)
         if UserAccount.objects.filter(email__iexact=email).exists():
             return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
@@ -604,8 +606,8 @@ class StaffViewSet(viewsets.ViewSet):
             user.phone = (data.get('phone') or '').strip()
         if 'user_type' in data and data['user_type']:
             ut = data['user_type'].strip().lower()
-            if ut not in VALID_ROLES:
-                raise ValidationError(f'Invalid role. Must be one of {VALID_ROLES}')
+            if not Role.objects.filter(name=ut).exists():
+                raise ValidationError(f'Invalid role. Must be one of {valid_role_names()}')
             user.user_type = ut
             user.is_staff = ut == 'admin'
             user.is_superuser = ut == 'admin'
@@ -643,7 +645,7 @@ class StaffViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], url_path='roles')
     def roles(self, request):
         return Response({"data": [
-            {"value": r, "label": r.capitalize()} for r in VALID_ROLES
+            {"value": r, "label": r.replace('_', ' ').capitalize()} for r in valid_role_names()
         ]})
 
 
