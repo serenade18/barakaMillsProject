@@ -161,7 +161,7 @@ class AdminUserViewSet(viewsets.ViewSet):
 
 # Hybrid viewset
 class HybridUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
+    permission_classes_by_action = {'create': [IsAdminRole], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -283,7 +283,7 @@ class HybridUserViewSet(viewsets.ViewSet):
 
 # Sales viewset
 class SalesUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
+    permission_classes_by_action = {'create': [IsAdminRole], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -403,7 +403,7 @@ class SalesUserViewSet(viewsets.ViewSet):
 
 # Accounts viewset
 class AccountsUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
+    permission_classes_by_action = {'create': [IsAdminRole], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
