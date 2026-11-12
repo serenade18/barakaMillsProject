@@ -96,10 +96,12 @@ class ChangePasswordView(APIView):
 
 # Admin viewset
 class AdminUserViewSet(viewsets.ViewSet):
+    # Creating an admin (an active superuser) must never be open to the
+    # public; only an existing admin may do it.
     permission_classes_by_action = {
-        'create': [AllowAny],
+        'create': [IsAdminRole],
         'verify_otp': [AllowAny],
-        'default': [IsAuthenticated]
+        'default': [IsAdminRole]
     }
 
     def get_permissions(self):
@@ -159,7 +161,7 @@ class AdminUserViewSet(viewsets.ViewSet):
 
 # Hybrid viewset
 class HybridUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -281,7 +283,7 @@ class HybridUserViewSet(viewsets.ViewSet):
 
 # Sales viewset
 class SalesUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -401,7 +403,7 @@ class SalesUserViewSet(viewsets.ViewSet):
 
 # Accounts viewset
 class AccountsUserViewSet(viewsets.ViewSet):
-    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAuthenticated]}
+    permission_classes_by_action = {'create': [AllowAny], 'list': [IsAdminRole], 'verify_otp': [AllowAny], 'default': [IsAdminRole]}
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, self.permission_classes_by_action['default'])]
@@ -527,15 +529,15 @@ VALID_ROLES = ['admin', 'sales', 'accounts', 'hybrid']
 
 
 class StaffViewSet(viewsets.ViewSet):
-    """Full CRUD for staff. Admin-only writes; authenticated reads."""
+    """Full CRUD for staff. Admin only."""
     permission_classes_by_action = {
-        'list': [IsAuthenticated],
-        'retrieve': [IsAuthenticated],
+        'list': [IsAdminRole],
+        'retrieve': [IsAdminRole],
         'create': [IsAdminRole],
         'update': [IsAdminRole],
         'partial_update': [IsAdminRole],
         'destroy': [IsAdminRole],
-        'default': [IsAuthenticated],
+        'default': [IsAdminRole],
     }
 
     def get_permissions(self):
